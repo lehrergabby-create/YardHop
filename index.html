@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YardHop</title>
+  <title>JobJr</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
     :root {
-      --green: #3d8c5f;
-      --green-light: #e8f5ee;
-      --green-mid: #c3e6d0;
+      --coral: #f26b4e;
+      --coral-light: #fef0ec;
+      --coral-mid: #f9c4b8;
+      --orange: #f59132;
+      --orange-light: #fff6e8;
       --yellow: #f5c842;
       --yellow-light: #fffbe8;
-      --text: #1a2e1f;
-      --text-soft: #5a7063;
-      --bg: #f7faf8;
+      --text: #2b1a10;
+      --text-soft: #8a6050;
+      --bg: #fffaf7;
       --white: #ffffff;
-      --border: #d4e8db;
-      --red: #e05c5c;
-      --card-shadow: 0 2px 12px rgba(61,140,95,0.10);
+      --border: #f0ddd5;
+      --card-shadow: 0 2px 12px rgba(242,107,78,0.10);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,34 +35,12 @@
       position: relative;
     }
 
-    /* ── SCREENS ── */
     .screen { display: none; padding: 24px 20px 100px; min-height: 100vh; }
     .screen.active { display: block; }
 
-    /* ── TOP BAR ── */
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 20px 0;
-      margin-bottom: 4px;
-    }
-    .topbar-logo { font-size: 22px; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
-    .topbar-logo span { color: var(--yellow); }
-    .topbar-role-badge {
-      font-size: 11px;
-      font-weight: 700;
-      background: var(--green-light);
-      color: var(--green);
-      border-radius: 20px;
-      padding: 4px 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* ── WELCOME ── */
+    /* WELCOME */
     #welcomeScreen {
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -69,206 +48,122 @@
       padding: 40px 28px;
       text-align: center;
     }
+    #welcomeScreen.active { display: flex; }
     .welcome-icon { font-size: 64px; margin-bottom: 12px; }
-    .welcome-title { font-size: 36px; font-weight: 900; color: var(--green); line-height: 1.1; margin-bottom: 8px; }
-    .welcome-title span { color: var(--yellow); }
-    .welcome-sub { font-size: 15px; color: var(--text-soft); margin-bottom: 40px; line-height: 1.5; }
+    .welcome-title { font-size: 40px; font-weight: 900; color: var(--coral); line-height: 1.1; margin-bottom: 8px; }
+    .welcome-title span { color: var(--orange); }
+    .welcome-sub { font-size: 15px; color: var(--text-soft); margin-bottom: 40px; line-height: 1.6; }
     .welcome-buttons { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+
+    /* BUTTONS */
     .btn-primary {
-      background: var(--green);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 800;
-      font-family: 'Nunito', sans-serif;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      width: 100%;
+      background: var(--coral); color: white; border: none;
+      border-radius: 14px; padding: 16px; font-size: 16px; font-weight: 800;
+      font-family: 'Nunito', sans-serif; cursor: pointer;
+      transition: background 0.15s, transform 0.1s; width: 100%;
     }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-primary:hover { background: #2f7049; }
+    .btn-primary:active { transform: scale(0.98); background: #d95a3d; }
+    .btn-primary:hover { background: #d95a3d; }
     .btn-secondary {
-      background: var(--white);
-      color: var(--green);
-      border: 2px solid var(--green);
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 800;
-      font-family: 'Nunito', sans-serif;
-      cursor: pointer;
-      transition: background 0.15s;
-      width: 100%;
+      background: var(--white); color: var(--coral);
+      border: 2px solid var(--coral); border-radius: 14px; padding: 14px;
+      font-size: 16px; font-weight: 800; font-family: 'Nunito', sans-serif;
+      cursor: pointer; transition: background 0.15s; width: 100%;
     }
-    .btn-secondary:hover { background: var(--green-light); }
+    .btn-secondary:hover { background: var(--coral-light); }
     .btn-ghost {
-      background: transparent;
-      color: var(--text-soft);
-      border: none;
-      padding: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      font-family: 'Nunito', sans-serif;
-      cursor: pointer;
-      text-decoration: underline;
+      background: transparent; color: var(--text-soft); border: none;
+      padding: 10px; font-size: 14px; font-weight: 700;
+      font-family: 'Nunito', sans-serif; cursor: pointer; text-decoration: underline;
     }
 
-    /* ── FORMS ── */
-    .screen-title { font-size: 24px; font-weight: 900; margin-bottom: 6px; color: var(--text); }
+    /* FORMS */
+    .screen-title { font-size: 24px; font-weight: 900; margin-bottom: 6px; }
     .screen-sub { font-size: 14px; color: var(--text-soft); margin-bottom: 24px; }
     .form-group { display: flex; flex-direction: column; gap: 12px; }
-    .field-label { font-size: 12px; font-weight: 800; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-    input[type="text"], input[type="number"], input[type="email"], input[type="tel"], select, textarea {
-      width: 100%;
-      background: var(--white);
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      padding: 13px 14px;
-      font-size: 15px;
-      font-family: 'Nunito', sans-serif;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.15s;
-      appearance: none;
+    .field-label { font-size: 12px; font-weight: 800; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%; background: var(--white); border: 2px solid var(--border);
+      border-radius: 12px; padding: 13px 14px; font-size: 15px;
+      font-family: 'Nunito', sans-serif; color: var(--text); outline: none;
+      transition: border-color 0.15s; appearance: none;
     }
-    input:focus, select:focus, textarea:focus { border-color: var(--green); }
+    input:focus, select:focus, textarea:focus { border-color: var(--coral); }
     textarea { resize: vertical; min-height: 80px; }
     .checkbox-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      background: var(--green-light);
-      border-radius: 12px;
-      padding: 14px;
+      display: flex; align-items: flex-start; gap: 10px;
+      background: var(--coral-light); border-radius: 12px; padding: 14px;
     }
     .checkbox-row input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      min-width: 20px;
-      accent-color: var(--green);
-      margin-top: 1px;
-      border: none;
-      padding: 0;
+      width: 20px; height: 20px; min-width: 20px;
+      accent-color: var(--coral); margin-top: 1px; border: none; padding: 0;
     }
     .checkbox-row label { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; cursor: pointer; }
     .form-actions { margin-top: 8px; display: flex; flex-direction: column; gap: 10px; }
 
-    /* ── HOME ── */
+    /* HOME */
     .home-greeting { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
     .home-sub { font-size: 14px; color: var(--text-soft); margin-bottom: 24px; }
+    .topbar-role-badge {
+      font-size: 11px; font-weight: 700; background: var(--coral-light); color: var(--coral);
+      border-radius: 20px; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
     .home-grid { display: flex; flex-direction: column; gap: 12px; }
     .home-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color 0.15s, transform 0.1s;
+      background: var(--white); border-radius: 16px; padding: 18px;
+      box-shadow: var(--card-shadow); display: flex; align-items: center; gap: 16px;
+      cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s, transform 0.1s;
     }
-    .home-card:hover { border-color: var(--green-mid); }
+    .home-card:hover { border-color: var(--coral-mid); }
     .home-card:active { transform: scale(0.98); }
     .home-card-icon { font-size: 32px; }
     .home-card-title { font-size: 16px; font-weight: 800; }
     .home-card-sub { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
 
-    /* ── SECTION HEADER ── */
+    /* SECTION */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .section-header h2 { font-size: 22px; font-weight: 900; }
 
-    /* ── SAFETY BANNER ── */
+    /* SAFETY BANNER */
     .safety-banner {
-      background: var(--yellow-light);
-      border: 1.5px solid var(--yellow);
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #7a6010;
-      margin-bottom: 16px;
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
+      background: var(--yellow-light); border: 1.5px solid var(--yellow);
+      border-radius: 12px; padding: 12px 14px; font-size: 13px; font-weight: 600;
+      color: #7a6010; margin-bottom: 16px; display: flex; gap: 8px; align-items: flex-start;
     }
 
-    /* ── JOB / HELPER CARDS ── */
-    .scroll-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+    /* CARDS */
+    .scroll-list { display: flex; flex-direction: column; gap: 12px; }
     .job-card, .helper-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: var(--card-shadow);
-      cursor: pointer;
-      border: 2px solid transparent;
+      background: var(--white); border-radius: 16px; padding: 18px;
+      box-shadow: var(--card-shadow); cursor: pointer; border: 2px solid transparent;
       transition: border-color 0.15s, transform 0.1s;
     }
-    .job-card:hover, .helper-card:hover { border-color: var(--green-mid); }
+    .job-card:hover, .helper-card:hover { border-color: var(--coral-mid); }
     .job-card:active, .helper-card:active { transform: scale(0.98); }
     .job-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
     .job-title { font-size: 17px; font-weight: 800; }
-    .pay-badge {
-      background: var(--green);
-      color: white;
-      font-size: 13px;
-      font-weight: 800;
-      border-radius: 8px;
-      padding: 3px 10px;
-    }
+    .pay-badge { background: var(--coral); color: white; font-size: 13px; font-weight: 800; border-radius: 8px; padding: 3px 10px; }
     .job-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-    .tag {
-      background: var(--green-light);
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 8px;
-      padding: 3px 10px;
-    }
+    .tag { background: var(--orange-light); color: var(--orange); font-size: 12px; font-weight: 700; border-radius: 8px; padding: 3px 10px; }
     .helper-top { display: flex; align-items: center; gap: 14px; }
     .helper-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--green-mid);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--green);
-      flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 50%; background: var(--coral-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 900; color: var(--coral); flex-shrink: 0;
     }
     .helper-name { font-size: 17px; font-weight: 800; }
     .helper-meta { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
     .verified-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #e8f5ee;
-      color: var(--green);
-      font-size: 11px;
-      font-weight: 700;
-      border-radius: 8px;
-      padding: 2px 8px;
-      margin-top: 6px;
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--coral-light); color: var(--coral);
+      font-size: 11px; font-weight: 700; border-radius: 8px; padding: 2px 8px; margin-top: 6px;
     }
 
-    /* ── DETAILS SCREEN ── */
+    /* DETAILS */
     .details-type-badge {
-      display: inline-block;
-      background: var(--green-light);
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 800;
-      border-radius: 8px;
-      padding: 4px 12px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      display: inline-block; background: var(--coral-light); color: var(--coral);
+      font-size: 12px; font-weight: 800; border-radius: 8px; padding: 4px 12px;
+      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;
     }
     .details-title { font-size: 26px; font-weight: 900; margin-bottom: 12px; }
     .details-section { background: var(--white); border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: var(--card-shadow); }
@@ -276,158 +171,199 @@
     .details-row:last-child { border-bottom: none; }
     .details-row-icon { font-size: 18px; width: 24px; text-align: center; }
     .details-row-label { font-weight: 700; }
-    .details-row-value { color: var(--text-soft); margin-left: auto; font-size: 14px; }
+    .details-row-value { color: var(--text-soft); margin-left: auto; font-size: 14px; text-align: right; max-width: 55%; }
     .address-locked {
-      background: var(--yellow-light);
-      border: 1.5px solid var(--yellow);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #7a6010;
-      font-weight: 600;
-      margin-top: 4px;
+      background: var(--yellow-light); border: 1.5px solid var(--yellow);
+      border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #7a6010; font-weight: 600; margin-top: 4px;
     }
 
-    /* ── POST JOB ── */
+    /* POST JOB */
     .post-form { display: flex; flex-direction: column; gap: 14px; }
 
-    /* ── PROFILE ── */
+    /* PROFILE */
     .profile-header {
-      background: var(--green);
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      color: white;
-      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--coral), var(--orange));
+      border-radius: 20px; padding: 24px; text-align: center; color: white; margin-bottom: 16px;
     }
     .profile-avatar {
-      width: 72px;
-      height: 72px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      font-weight: 900;
-      margin: 0 auto 12px;
+      width: 72px; height: 72px; background: rgba(255,255,255,0.25); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 900; margin: 0 auto 12px;
     }
     .profile-name { font-size: 22px; font-weight: 900; }
     .profile-role { font-size: 13px; opacity: 0.85; margin-top: 4px; }
     .profile-card { background: var(--white); border-radius: 14px; padding: 16px; box-shadow: var(--card-shadow); margin-bottom: 12px; }
+    .profile-card-title { font-size: 13px; font-weight: 800; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
     .profile-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
     .profile-row:last-child { border-bottom: none; }
     .profile-row-icon { font-size: 18px; }
     .profile-row-label { font-weight: 700; flex: 1; }
     .profile-row-value { color: var(--text-soft); font-size: 14px; }
 
-    /* ── FAMILY / SUPPORT ── */
+    /* STAT BADGES on profile */
+    .profile-stats { display: flex; gap: 10px; margin-bottom: 12px; }
+    .stat-box {
+      flex: 1; background: var(--white); border-radius: 14px; padding: 14px 10px;
+      text-align: center; box-shadow: var(--card-shadow);
+    }
+    .stat-number { font-size: 22px; font-weight: 900; color: var(--coral); }
+    .stat-label { font-size: 11px; font-weight: 700; color: var(--text-soft); margin-top: 2px; }
+
+    /* CHAT REQUESTS */
+    .chat-request-card {
+      background: var(--white); border-radius: 14px; padding: 16px;
+      box-shadow: var(--card-shadow); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .chat-request-avatar {
+      width: 44px; height: 44px; border-radius: 50%; background: var(--coral-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: var(--coral); flex-shrink: 0;
+    }
+    .chat-request-name { font-size: 15px; font-weight: 800; }
+    .chat-request-job { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
+    .chat-request-actions { display: flex; gap: 8px; margin-left: auto; flex-shrink: 0; }
+    .btn-accept {
+      background: var(--coral); color: white; border: none; border-radius: 10px;
+      padding: 8px 14px; font-size: 13px; font-weight: 800;
+      font-family: 'Nunito', sans-serif; cursor: pointer;
+    }
+    .btn-decline {
+      background: var(--coral-light); color: var(--coral); border: none; border-radius: 10px;
+      padding: 8px 14px; font-size: 13px; font-weight: 800;
+      font-family: 'Nunito', sans-serif; cursor: pointer;
+    }
+
+    /* MY JOBS TABS (helper) */
+    .tab-bar {
+      display: flex; gap: 6px; margin-bottom: 16px;
+      overflow-x: auto; padding-bottom: 4px;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: var(--white); color: var(--text-soft); border: 2px solid var(--border);
+      border-radius: 20px; padding: 7px 16px; font-size: 13px; font-weight: 800;
+      font-family: 'Nunito', sans-serif; cursor: pointer; white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .tab-btn.active { background: var(--coral); color: white; border-color: var(--coral); }
+
+    /* STATUS BADGE on job cards */
+    .status-badge {
+      font-size: 11px; font-weight: 800; border-radius: 8px; padding: 3px 10px; margin-left: 8px;
+    }
+    .status-pending { background: var(--yellow-light); color: #7a6010; }
+    .status-accepted { background: #e8f5ee; color: #2e7d52; }
+    .status-declined { background: #ffeaea; color: #c0392b; }
+    .status-completed { background: var(--orange-light); color: var(--orange); }
+
+    /* FAMILY / SUPPORT */
     .placeholder-box {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 28px;
-      text-align: center;
-      box-shadow: var(--card-shadow);
-      color: var(--text-soft);
+      background: var(--white); border-radius: 16px; padding: 28px;
+      text-align: center; box-shadow: var(--card-shadow); color: var(--text-soft); margin-bottom: 14px;
     }
     .placeholder-box .placeholder-icon { font-size: 40px; margin-bottom: 12px; }
     .placeholder-box p { font-size: 14px; line-height: 1.6; }
-
-    .child-card { background: var(--green-light); border-radius: 12px; padding: 14px; margin-top: 10px; }
-    .child-card h4 { font-size: 15px; font-weight: 800; color: var(--green); }
+    .child-card { background: var(--coral-light); border-radius: 12px; padding: 14px; margin-top: 10px; }
+    .child-card h4 { font-size: 15px; font-weight: 800; color: var(--coral); }
     .child-card p { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
 
-    /* ── BOTTOM NAV ── */
+    /* BOTTOM NAV */
     #bottomNav {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      background: var(--white);
-      border-top: 1.5px solid var(--border);
-      padding: 10px 0 18px;
-      z-index: 100;
+      display: none; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px; background: var(--white);
+      border-top: 1.5px solid var(--border); padding: 10px 0 18px; z-index: 100;
     }
     .nav-items { display: flex; justify-content: space-around; }
     .nav-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      padding: 4px 12px;
-      border-radius: 10px;
-      transition: background 0.15s;
+      background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 3px; padding: 4px 12px; border-radius: 10px; transition: background 0.15s;
     }
-    .nav-btn:hover { background: var(--green-light); }
-    .nav-btn.active .nav-icon { color: var(--green); }
-    .nav-btn.active .nav-label { color: var(--green); font-weight: 800; }
-    .nav-icon { font-size: 22px; color: #9ab8a5; }
-    .nav-label { font-size: 11px; font-weight: 700; color: #9ab8a5; font-family: 'Nunito', sans-serif; }
+    .nav-btn:hover { background: var(--coral-light); }
+    .nav-btn.active .nav-icon, .nav-btn.active .nav-label { color: var(--coral); font-weight: 800; }
+    .nav-icon { font-size: 22px; color: #c8a090; }
+    .nav-label { font-size: 11px; font-weight: 700; color: #c8a090; font-family: 'Nunito', sans-serif; }
 
-    /* ── BACK BUTTON ── */
+    /* BACK BUTTON */
     .back-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-soft);
-      font-family: 'Nunito', sans-serif;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0;
-      margin-bottom: 20px;
+      background: none; border: none; cursor: pointer; font-size: 15px; font-weight: 700;
+      color: var(--text-soft); font-family: 'Nunito', sans-serif;
+      display: flex; align-items: center; gap: 6px; padding: 0; margin-bottom: 20px;
     }
 
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-soft);
-    }
-    .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; line-height: 1.6; }
-
-    /* ── SUCCESS TOAST ── */
+    /* TOAST */
     .toast {
-      position: fixed;
-      bottom: 90px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--green);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 14px;
-      z-index: 200;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      white-space: nowrap;
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: var(--coral); color: white; padding: 12px 24px; border-radius: 20px;
+      font-weight: 700; font-size: 14px; z-index: 200; opacity: 0; transition: opacity 0.3s;
+      pointer-events: none; white-space: nowrap;
     }
     .toast.show { opacity: 1; }
 
-    /* ── DIVIDER ── */
-    .divider { height: 1px; background: var(--border); margin: 8px 0; }
+    /* PERMISSION MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 500;
+      align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-sheet {
+      background: var(--white); border-radius: 24px 24px 0 0;
+      padding: 28px 24px 40px; width: 100%; max-width: 430px;
+      text-align: center; animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-icon { font-size: 52px; margin-bottom: 12px; }
+    .modal-app-name { font-size: 13px; font-weight: 800; color: var(--text-soft); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .modal-title { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
+    .modal-body { font-size: 14px; color: var(--text-soft); line-height: 1.6; margin-bottom: 24px; }
+    .modal-body strong { color: var(--text); }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+    .modal-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .btn-modal-allow {
+      background: var(--coral); color: white; border: none; border-radius: 14px;
+      padding: 15px; font-size: 16px; font-weight: 800;
+      font-family: 'Nunito', sans-serif; cursor: pointer; width: 100%;
+    }
+    .btn-modal-deny {
+      background: transparent; color: var(--coral); border: none;
+      padding: 12px; font-size: 15px; font-weight: 700;
+      font-family: 'Nunito', sans-serif; cursor: pointer; width: 100%;
+    }
+
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-soft); }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; line-height: 1.6; }
   </style>
 </head>
 <body>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ═══════════════════════════════════════ WELCOME -->
+<!-- LOCATION PERMISSION MODAL -->
+<div class="modal-overlay" id="locationModal">
+  <div class="modal-sheet">
+    <div class="modal-icon">📍</div>
+    <div class="modal-app-name">JobJr</div>
+    <div class="modal-title">Allow JobJr to use your location?</div>
+    <div class="modal-body">
+      JobJr uses your location <strong>only while the app is open</strong> to show jobs and helpers in your neighborhood.<br><br>
+      Your exact location is <strong>never shared</strong> with other users. Only your neighborhood name is visible.
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-allow" onclick="allowLocation()">Allow While Using App</button>
+      <div class="modal-divider"></div>
+      <button class="btn-modal-deny" onclick="denyLocation()">Don't Allow</button>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
 <div id="welcomeScreen" class="active">
-  <div class="welcome-icon">🌿</div>
-  <div class="welcome-title">Yard<span>Hop</span></div>
+  <div class="welcome-icon">🌟</div>
+  <div class="welcome-title">Job<span>Jr</span></div>
   <p class="welcome-sub">Safe local jobs for teens.<br>Trusted help for families.</p>
   <div class="welcome-buttons">
     <button class="btn-primary" onclick="chooseRole('helper')">🙋 I Want to Help</button>
@@ -435,67 +371,38 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ SIGNUP -->
+<!-- SIGNUP -->
 <div id="signupScreen" class="screen">
   <h1 class="screen-title" id="signupTitle">Create Account</h1>
   <p class="screen-sub" id="signupSub"></p>
 
-  <!-- HELPER SIGNUP -->
   <div id="helperSignup" style="display:none;">
     <div class="form-group">
-      <div>
-        <div class="field-label">Your Name</div>
-        <input type="text" id="helperName" placeholder="First name">
-      </div>
-      <div>
-        <div class="field-label">Your Age (13–17)</div>
-        <input type="number" id="helperAge" placeholder="Age" min="13" max="17">
-      </div>
-      <div>
-        <div class="field-label">Neighborhood</div>
-        <input type="text" id="helperNeighborhood" placeholder="e.g. Maple Grove">
-      </div>
-      <div>
-        <div class="field-label">Your Skills</div>
-        <input type="text" id="helperSkills" placeholder="e.g. yard work, dog walking">
-      </div>
-      <div>
-        <div class="field-label">Parent / Guardian Contact</div>
-        <input type="text" id="parentContact" placeholder="Phone or email">
-      </div>
+      <div><div class="field-label">Your Name</div><input type="text" id="helperName" placeholder="First name"></div>
+      <div><div class="field-label">Your Age (13–17)</div><input type="number" id="helperAge" placeholder="Age" min="13" max="17"></div>
+      <div><div class="field-label">Neighborhood</div><input type="text" id="helperNeighborhood" placeholder="e.g. Maple Grove"></div>
+      <div><div class="field-label">Your Skills</div><input type="text" id="helperSkills" placeholder="e.g. yard work, dog walking"></div>
+      <div><div class="field-label">Parent / Guardian Contact</div><input type="text" id="parentContact" placeholder="Phone or email"></div>
       <div class="checkbox-row">
         <input type="checkbox" id="helperSafety">
-        <label for="helperSafety">My parent or guardian knows I am using YardHop and approves.</label>
+        <label for="helperSafety">My parent or guardian knows I'm using JobJr and approves.</label>
       </div>
     </div>
     <div class="form-actions">
       <button class="btn-primary" onclick="finishHelperSignup()">Create Helper Account →</button>
-      <button class="btn-ghost" onclick="goBack('welcomeScreen')">← Back</button>
+      <button class="btn-ghost" onclick="goWelcome()">← Back</button>
     </div>
   </div>
 
-  <!-- LISTER SIGNUP -->
   <div id="listerSignup" style="display:none;">
     <div class="form-group">
-      <div>
-        <div class="field-label">Full Name</div>
-        <input type="text" id="listerName" placeholder="Your name">
-      </div>
-      <div>
-        <div class="field-label">Your Age</div>
-        <input type="number" id="listerAge" placeholder="Age" min="18">
-      </div>
-      <div>
-        <div class="field-label">Neighborhood</div>
-        <input type="text" id="listerNeighborhood" placeholder="e.g. Maple Grove">
-      </div>
-      <div>
-        <div class="field-label">Proof of Age / ID</div>
-        <input type="text" id="listerProof" placeholder="ID type (e.g. Driver's License)">
-      </div>
+      <div><div class="field-label">Full Name</div><input type="text" id="listerName" placeholder="Your name"></div>
+      <div><div class="field-label">Your Age</div><input type="number" id="listerAge" placeholder="Age" min="18"></div>
+      <div><div class="field-label">Neighborhood</div><input type="text" id="listerNeighborhood" placeholder="e.g. Maple Grove"></div>
+      <div><div class="field-label">Proof of Age / ID</div><input type="text" id="listerProof" placeholder="e.g. Driver's License"></div>
       <div class="checkbox-row">
         <input type="checkbox" id="listerLocation">
-        <label for="listerLocation">I agree to location verification while using YardHop.</label>
+        <label for="listerLocation">I agree to location verification while using JobJr.</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="listerSafety">
@@ -504,14 +411,14 @@
     </div>
     <div class="form-actions">
       <button class="btn-primary" onclick="finishListerSignup()">Create Lister Account →</button>
-      <button class="btn-ghost" onclick="goBack('welcomeScreen')">← Back</button>
+      <button class="btn-ghost" onclick="goWelcome()">← Back</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ HOME -->
+<!-- HOME -->
 <div id="homeScreen" class="screen">
-  <div class="topbar" style="padding:0 0 0 0; margin-bottom: 20px;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
     <div>
       <div class="home-greeting" id="homeGreeting">Hey there 👋</div>
       <div class="home-sub" id="homeMessage"></div>
@@ -519,112 +426,63 @@
     <span class="topbar-role-badge" id="homeRoleBadge"></span>
   </div>
 
+  <!-- LISTER HOME -->
   <div class="home-grid" id="listerHome" style="display:none;">
     <div class="home-card" onclick="showMainPage('postJobScreen')">
       <div class="home-card-icon">➕</div>
-      <div>
-        <div class="home-card-title">Post a Job</div>
-        <div class="home-card-sub">Get help from a teen nearby</div>
-      </div>
+      <div><div class="home-card-title">Post a Job</div><div class="home-card-sub">Get help from a teen nearby</div></div>
     </div>
     <div class="home-card" onclick="showMainPage('jobsScreen')">
       <div class="home-card-icon">📋</div>
-      <div>
-        <div class="home-card-title">My Posted Jobs</div>
-        <div class="home-card-sub">View and manage your listings</div>
-      </div>
+      <div><div class="home-card-title">My Posted Jobs</div><div class="home-card-sub">View and manage your listings</div></div>
     </div>
     <div class="home-card" onclick="showMainPage('helpersScreen')">
       <div class="home-card-icon">🙋</div>
-      <div>
-        <div class="home-card-title">Browse Helpers</div>
-        <div class="home-card-sub">Find verified teens nearby</div>
-      </div>
+      <div><div class="home-card-title">Browse Helpers</div><div class="home-card-sub">Find verified teens nearby</div></div>
     </div>
   </div>
 
+  <!-- HELPER HOME -->
   <div class="home-grid" id="helperHome" style="display:none;">
     <div class="home-card" onclick="showMainPage('jobsScreen')">
       <div class="home-card-icon">🔍</div>
-      <div>
-        <div class="home-card-title">Find Jobs Near You</div>
-        <div class="home-card-sub">Browse safe local gigs</div>
-      </div>
+      <div><div class="home-card-title">Find Jobs Near You</div><div class="home-card-sub">Browse safe local gigs</div></div>
     </div>
-    <div class="home-card" onclick="showMainPage('profileScreen')">
-      <div class="home-card-icon">⭐</div>
-      <div>
-        <div class="home-card-title">My Profile</div>
-        <div class="home-card-sub">View your skills and ratings</div>
-      </div>
+    <div class="home-card" onclick="showMainPage('myJobsScreen')">
+      <div class="home-card-icon">📬</div>
+      <div><div class="home-card-title">My Applications</div><div class="home-card-sub">Pending, accepted, and completed</div></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ JOBS -->
+<!-- JOBS NEAR YOU -->
 <div id="jobsScreen" class="screen">
   <button class="back-btn" onclick="showMainPage('homeScreen')">← Back</button>
-  <div class="section-header">
-    <h2 id="jobsScreenTitle">Jobs Near You</h2>
-  </div>
-
-  <div class="safety-banner">
-    🔒 Exact addresses unlock only after both sides confirm a match.
-  </div>
-
+  <div class="section-header"><h2 id="jobsScreenTitle">Jobs Near You</h2></div>
+  <div class="safety-banner">🔒 Exact addresses unlock only after both sides confirm a match.</div>
   <div class="scroll-list" id="jobsList">
-    <!-- Seeded jobs -->
-    <div class="job-card" onclick="openJobDetails('Water Plants', '$15', 'Easy', '13–17', 'Maple Grove', 'Easy plant watering while a family is away. Everything labeled. Just water and leave.')">
-      <div class="job-card-top">
-        <div class="job-title">🌱 Water Plants</div>
-        <div class="pay-badge">$15</div>
-      </div>
-      <div class="job-tags">
-        <span class="tag">Easy</span>
-        <span class="tag">Ages 13–17</span>
-        <span class="tag">📍 Maple Grove</span>
-      </div>
+    <div class="job-card" onclick="openJobDetails('Water Plants','$15','Easy','13–17','Maple Grove','Easy plant watering while a family is away. Everything is labeled.')">
+      <div class="job-card-top"><div class="job-title">🌱 Water Plants</div><div class="pay-badge">$15</div></div>
+      <div class="job-tags"><span class="tag">Easy</span><span class="tag">Ages 13–17</span><span class="tag">📍 Maple Grove</span></div>
     </div>
-
-    <div class="job-card" onclick="openJobDetails('Dog Walking', '$20', 'Medium', '14–17', 'Elm Street area', 'Walk one friendly golden retriever around the block. About 30 minutes. Dog is leash-trained.')">
-      <div class="job-card-top">
-        <div class="job-title">🐕 Dog Walking</div>
-        <div class="pay-badge">$20</div>
-      </div>
-      <div class="job-tags">
-        <span class="tag">Medium</span>
-        <span class="tag">Ages 14–17</span>
-        <span class="tag">📍 Elm Street area</span>
-      </div>
+    <div class="job-card" onclick="openJobDetails('Dog Walking','$20','Medium','14–17','Elm Street area','Walk one friendly golden retriever. About 30 minutes. Leash-trained.')">
+      <div class="job-card-top"><div class="job-title">🐕 Dog Walking</div><div class="pay-badge">$20</div></div>
+      <div class="job-tags"><span class="tag">Medium</span><span class="tag">Ages 14–17</span><span class="tag">📍 Elm Street area</span></div>
     </div>
-
-    <div class="job-card" onclick="openJobDetails('Yard Cleanup', '$30', 'Medium', '14–17', 'Birchwood', 'Rake leaves and bag them in the front and back yard. Bags provided.')">
-      <div class="job-card-top">
-        <div class="job-title">🍂 Yard Cleanup</div>
-        <div class="pay-badge">$30</div>
-      </div>
-      <div class="job-tags">
-        <span class="tag">Medium</span>
-        <span class="tag">Ages 14–17</span>
-        <span class="tag">📍 Birchwood</span>
-      </div>
+    <div class="job-card" onclick="openJobDetails('Yard Cleanup','$30','Medium','14–17','Birchwood','Rake leaves and bag them. Bags provided.')">
+      <div class="job-card-top"><div class="job-title">🍂 Yard Cleanup</div><div class="pay-badge">$30</div></div>
+      <div class="job-tags"><span class="tag">Medium</span><span class="tag">Ages 14–17</span><span class="tag">📍 Birchwood</span></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ HELPERS -->
+<!-- HELPERS -->
 <div id="helpersScreen" class="screen">
   <button class="back-btn" onclick="showMainPage('homeScreen')">← Back</button>
-  <div class="section-header">
-    <h2>Teen Helpers</h2>
-  </div>
-
-  <div class="safety-banner">
-    ✅ All helpers are family-verified teens in your area.
-  </div>
-
+  <div class="section-header"><h2>Teen Helpers</h2></div>
+  <div class="safety-banner">✅ All helpers are family-verified teens in your area.</div>
   <div class="scroll-list" id="helpersList">
-    <div class="helper-card" onclick="openHelperDetails('Ava', '16', 'Maple Grove', 'Babysitting, tutoring, pet care', '5.0')">
+    <div class="helper-card" onclick="openHelperDetails('Ava','16','Maple Grove','Babysitting, tutoring, pet care','5.0')">
       <div class="helper-top">
         <div class="helper-avatar">A</div>
         <div>
@@ -632,16 +490,13 @@
           <div class="helper-meta">Age 16 · Maple Grove</div>
           <div class="verified-badge">✅ Family verified</div>
         </div>
-        <div style="margin-left:auto; font-size:13px; font-weight:800; color:var(--green);">⭐ 5.0</div>
+        <div style="margin-left:auto;font-size:13px;font-weight:800;color:var(--coral);">⭐ 5.0</div>
       </div>
       <div class="job-tags" style="margin-top:12px;">
-        <span class="tag">Babysitting</span>
-        <span class="tag">Tutoring</span>
-        <span class="tag">Pet Care</span>
+        <span class="tag">Babysitting</span><span class="tag">Tutoring</span><span class="tag">Pet Care</span>
       </div>
     </div>
-
-    <div class="helper-card" onclick="openHelperDetails('Leo', '15', 'Elm Street area', 'Yard work, dog walking, packages', '4.8')">
+    <div class="helper-card" onclick="openHelperDetails('Leo','15','Elm Street area','Yard work, dog walking, packages','4.8')">
       <div class="helper-top">
         <div class="helper-avatar">L</div>
         <div>
@@ -649,180 +504,202 @@
           <div class="helper-meta">Age 15 · Elm Street area</div>
           <div class="verified-badge">✅ Family verified</div>
         </div>
-        <div style="margin-left:auto; font-size:13px; font-weight:800; color:var(--green);">⭐ 4.8</div>
+        <div style="margin-left:auto;font-size:13px;font-weight:800;color:var(--coral);">⭐ 4.8</div>
       </div>
       <div class="job-tags" style="margin-top:12px;">
-        <span class="tag">Yard Work</span>
-        <span class="tag">Dog Walking</span>
-        <span class="tag">Packages</span>
+        <span class="tag">Yard Work</span><span class="tag">Dog Walking</span><span class="tag">Packages</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ POST JOB -->
+<!-- POST JOB -->
 <div id="postJobScreen" class="screen">
   <button class="back-btn" onclick="showMainPage('homeScreen')">← Back</button>
   <h1 class="screen-title">Post a Job</h1>
-  <p class="screen-sub">Only your neighborhood is shown — exact address is private until match.</p>
-
+  <p class="screen-sub">Only your neighborhood is shown — exact address stays private until a match.</p>
   <div class="post-form">
     <div>
       <div class="field-label">Job Type</div>
       <select id="jobType" onchange="updateJobQuestions()">
         <option value="">Choose a job type</option>
-        <option value="Babysitting">Babysitting</option>
-        <option value="Pet Sitting">Pet Sitting</option>
-        <option value="Dog Walking">Dog Walking</option>
-        <option value="Plant Watering">Plant Watering</option>
-        <option value="Package Pickup">Package Pickup</option>
-        <option value="Yard Work">Yard Work</option>
-        <option value="Tutoring">Tutoring</option>
-        <option value="Other">Other</option>
+        <option>Babysitting</option><option>Pet Sitting</option><option>Dog Walking</option>
+        <option>Plant Watering</option><option>Package Pickup</option>
+        <option>Yard Work</option><option>Tutoring</option><option>Other</option>
       </select>
     </div>
-
-    <div id="extraQuestions" style="display:flex; flex-direction:column; gap:12px;"></div>
-
-    <div>
-      <div class="field-label">Pay</div>
-      <input type="text" id="jobPay" placeholder="e.g. $20">
-    </div>
+    <div id="extraQuestions" style="display:flex;flex-direction:column;gap:12px;"></div>
+    <div><div class="field-label">Pay</div><input type="text" id="jobPay" placeholder="e.g. $20"></div>
     <div>
       <div class="field-label">Difficulty</div>
       <select id="jobIntensity">
         <option value="">Select difficulty</option>
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
+        <option>Easy</option><option>Medium</option><option>Hard</option>
       </select>
     </div>
-    <div>
-      <div class="field-label">Age Range</div>
-      <input type="text" id="jobAgeRange" placeholder="e.g. 14–17">
-    </div>
-    <div>
-      <div class="field-label">Date / Time Needed</div>
-      <input type="text" id="jobDate" placeholder="e.g. Sat June 15, around 10am">
-    </div>
-    <div>
-      <div class="field-label">Neighborhood (no exact address)</div>
-      <input type="text" id="jobNeighborhood" placeholder="e.g. Maple Grove">
-    </div>
-    <div>
-      <div class="field-label">Extra Notes</div>
-      <textarea id="jobNotes" placeholder="Any restrictions, special instructions, or info helpers should know..."></textarea>
-    </div>
-
+    <div><div class="field-label">Age Range</div><input type="text" id="jobAgeRange" placeholder="e.g. 14–17"></div>
+    <div><div class="field-label">Date / Time Needed</div><input type="text" id="jobDate" placeholder="e.g. Sat June 15, around 10am"></div>
+    <div><div class="field-label">Neighborhood (no exact address)</div><input type="text" id="jobNeighborhood" placeholder="e.g. Maple Grove"></div>
+    <div><div class="field-label">Extra Notes</div><textarea id="jobNotes" placeholder="Any restrictions or special instructions..."></textarea></div>
     <button class="btn-primary" onclick="submitJob()">Post Job →</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ DETAILS -->
+<!-- DETAILS -->
 <div id="detailsScreen" class="screen">
-  <button class="back-btn" id="detailsBackBtn" onclick="showMainPage('jobsScreen')">← Back</button>
-
+  <button class="back-btn" id="detailsBackBtn">← Back</button>
   <div class="details-type-badge" id="detailsTypeBadge"></div>
   <div class="details-title" id="detailsTitle"></div>
-
   <div class="details-section" id="detailsInfoCard"></div>
-
-  <div class="address-locked">
-    🔒 Address hidden · Unlocks after both sides confirm a match
-  </div>
-
-  <div style="margin-top: 20px; display:flex; flex-direction:column; gap:10px;">
-    <button class="btn-primary" id="requestButton" onclick="requestMatch()" style="display:none;">
-      Send Match Request
-    </button>
+  <div class="address-locked">🔒 Address hidden · Unlocks after both sides confirm a match</div>
+  <div style="margin-top:20px;">
+    <button class="btn-primary" id="requestButton" onclick="requestMatch()" style="display:none;">Send Match Request</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ PROFILE -->
+<!-- MY APPLICATIONS (helper only) -->
+<div id="myJobsScreen" class="screen">
+  <button class="back-btn" onclick="showMainPage('homeScreen')">← Back</button>
+  <div class="section-header"><h2>My Applications</h2></div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="filterMyJobs('all', this)">All</button>
+    <button class="tab-btn" onclick="filterMyJobs('pending', this)">⏳ Pending</button>
+    <button class="tab-btn" onclick="filterMyJobs('accepted', this)">✅ Accepted</button>
+    <button class="tab-btn" onclick="filterMyJobs('declined', this)">❌ Declined</button>
+    <button class="tab-btn" onclick="filterMyJobs('completed', this)">🏁 Completed</button>
+  </div>
+  <div id="myJobsList">
+    <!-- seeded demo applications -->
+    <div class="job-card" data-status="pending">
+      <div class="job-card-top">
+        <div class="job-title">🐕 Dog Walking</div>
+        <span class="status-badge status-pending">⏳ Pending</span>
+      </div>
+      <div class="job-tags"><span class="tag">$20</span><span class="tag">📍 Elm Street area</span></div>
+      <div style="font-size:13px;color:var(--text-soft);margin-top:8px;">Applied · Waiting for lister to respond</div>
+    </div>
+    <div class="job-card" data-status="accepted">
+      <div class="job-card-top">
+        <div class="job-title">🌱 Water Plants</div>
+        <span class="status-badge status-accepted">✅ Accepted</span>
+      </div>
+      <div class="job-tags"><span class="tag">$15</span><span class="tag">📍 Maple Grove</span></div>
+      <div style="font-size:13px;color:var(--text-soft);margin-top:8px;">Chat unlocked · Sat June 15, 10am</div>
+    </div>
+    <div class="job-card" data-status="completed">
+      <div class="job-card-top">
+        <div class="job-title">🍂 Yard Cleanup</div>
+        <span class="status-badge status-completed">🏁 Completed</span>
+      </div>
+      <div class="job-tags"><span class="tag">$30</span><span class="tag">📍 Birchwood</span></div>
+      <div style="font-size:13px;color:var(--text-soft);margin-top:8px;">Finished · ⭐ 5.0 rating received</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
 <div id="profileScreen" class="screen">
   <div class="profile-header">
     <div class="profile-avatar" id="profileAvatar">?</div>
-    <div class="profile-name" id="profileName"></div>
+    <div class="profile-name" id="profileName">Your Name</div>
     <div class="profile-role" id="profileRoleLabel"></div>
   </div>
 
-  <div class="profile-card" id="profileDetails"></div>
+  <!-- STATS ROW -->
+  <div class="profile-stats">
+    <div class="stat-box">
+      <div class="stat-number" id="statRating">—</div>
+      <div class="stat-label">Rating</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="statJobs">0</div>
+      <div class="stat-label">Jobs Done</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="statResponse">—</div>
+      <div class="stat-label">Response</div>
+    </div>
+  </div>
+
+  <!-- CHAT REQUESTS -->
+  <div class="profile-card" id="chatRequestsSection" style="display:none;">
+    <div class="profile-card-title">💬 Chat Requests</div>
+    <div id="chatRequestsList">
+      <div class="chat-request-card">
+        <div class="chat-request-avatar">M</div>
+        <div>
+          <div class="chat-request-name">Maria H.</div>
+          <div class="chat-request-job">Re: Dog Walking · Elm Street area</div>
+        </div>
+        <div class="chat-request-actions">
+          <button class="btn-accept" onclick="acceptChat(this)">Accept</button>
+          <button class="btn-decline" onclick="declineChat(this)">Decline</button>
+        </div>
+      </div>
+    </div>
+    <div id="noChatRequests" style="display:none;font-size:14px;color:var(--text-soft);text-align:center;padding:12px 0;">No pending chat requests</div>
+  </div>
+
+  <!-- PROFILE INFO -->
+  <div class="profile-card">
+    <div class="profile-card-title">About</div>
+    <div id="profileDetails"></div>
+  </div>
 </div>
 
-<!-- ═══════════════════════════════════════ FAMILY -->
+<!-- FAMILY -->
 <div id="familyScreen" class="screen">
   <h1 class="screen-title">Family</h1>
-
   <div id="listerFamilyTools" style="display:none;">
-    <p class="screen-sub">Add a child to your family account so they can apply to jobs under your supervision.</p>
-
+    <p class="screen-sub">Add a child so they can apply to jobs under your supervision.</p>
     <div class="form-group" style="margin-bottom:16px;">
-      <div>
-        <div class="field-label">Child's Name</div>
-        <input type="text" id="childName" placeholder="Name">
-      </div>
-      <div>
-        <div class="field-label">Child's Age</div>
-        <input type="number" id="childAge" placeholder="Age" min="13" max="17">
-      </div>
-      <div>
-        <div class="field-label">Skills</div>
-        <input type="text" id="childSkills" placeholder="e.g. yard work, pet care">
-      </div>
+      <div><div class="field-label">Child's Name</div><input type="text" id="childName" placeholder="Name"></div>
+      <div><div class="field-label">Child's Age</div><input type="number" id="childAge" placeholder="Age" min="13" max="17"></div>
+      <div><div class="field-label">Skills</div><input type="text" id="childSkills" placeholder="e.g. yard work, pet care"></div>
     </div>
     <button class="btn-primary" onclick="addChild()" style="margin-bottom:20px;">Add Child Account</button>
     <div id="childList"></div>
   </div>
-
   <div id="helperFamilyTools" style="display:none;">
     <div class="placeholder-box">
       <div class="placeholder-icon">👨‍👩‍👧</div>
-      <p>Parent approval, safety settings, and emergency contacts will go here.<br><br>Your parent/guardian will receive notifications when you apply to jobs.</p>
+      <p>Parent approval, safety settings, and emergency contacts will go here.<br><br>Your parent/guardian gets notified when you apply to jobs.</p>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ SUPPORT -->
+<!-- SUPPORT -->
 <div id="supportScreen" class="screen">
   <h1 class="screen-title">Support</h1>
   <p class="screen-sub">Safety resources and help</p>
-
-  <div class="placeholder-box" style="margin-bottom:14px;">
+  <div class="placeholder-box">
     <div class="placeholder-icon">📖</div>
-    <p><strong>Safety Rules & FAQs</strong><br><br>Review community guidelines and safety tips for helpers and listers.</p>
+    <p><strong>Safety Rules & FAQs</strong><br><br>Review community guidelines and safety tips.</p>
   </div>
-  <div class="placeholder-box" style="margin-bottom:14px;">
+  <div class="placeholder-box">
     <div class="placeholder-icon">🚨</div>
-    <p><strong>Report a Problem</strong><br><br>If something felt unsafe or wrong, report it here. All reports are reviewed.</p>
+    <p><strong>Report a Problem</strong><br><br>If something felt unsafe, report it here. All reports are reviewed.</p>
   </div>
   <div class="placeholder-box">
     <div class="placeholder-icon">💬</div>
-    <p><strong>Contact Support</strong><br><br>Reach the YardHop team directly.</p>
+    <p><strong>Contact Support</strong><br><br>Reach the JobJr team directly.</p>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ BOTTOM NAV -->
+<!-- BOTTOM NAV -->
 <div id="bottomNav">
   <div class="nav-items">
-    <button class="nav-btn" id="nav-home" onclick="showMainPage('homeScreen'); setActiveNav('nav-home')">
-      <span class="nav-icon">🏠</span>
-      <span class="nav-label">Home</span>
+    <button class="nav-btn" id="nav-home" onclick="showMainPage('homeScreen');setActiveNav('nav-home')">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
     </button>
-    <button class="nav-btn" id="nav-jobs" onclick="showMainPage('jobsScreen'); setActiveNav('nav-jobs')">
-      <span class="nav-icon">📋</span>
-      <span class="nav-label">Jobs</span>
+    <button class="nav-btn" id="nav-profile" onclick="showMainPage('profileScreen');setActiveNav('nav-profile')">
+      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
     </button>
-    <button class="nav-btn" id="nav-profile" onclick="showMainPage('profileScreen'); setActiveNav('nav-profile')">
-      <span class="nav-icon">👤</span>
-      <span class="nav-label">Profile</span>
+    <button class="nav-btn" id="nav-family" onclick="showMainPage('familyScreen');setActiveNav('nav-family')">
+      <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label">Family</span>
     </button>
-    <button class="nav-btn" id="nav-family" onclick="showMainPage('familyScreen'); setActiveNav('nav-family')">
-      <span class="nav-icon">👨‍👩‍👧</span>
-      <span class="nav-label">Family</span>
-    </button>
-    <button class="nav-btn" id="nav-support" onclick="showMainPage('supportScreen'); setActiveNav('nav-support')">
-      <span class="nav-icon">❓</span>
-      <span class="nav-label">Support</span>
+    <button class="nav-btn" id="nav-support" onclick="showMainPage('supportScreen');setActiveNav('nav-support')">
+      <span class="nav-icon">❓</span><span class="nav-label">Support</span>
     </button>
   </div>
 </div>
@@ -830,7 +707,28 @@
 <script>
   let userRole = "";
   let currentUser = {};
-  let previousScreen = "homeScreen";
+  let locationGranted = false;
+
+  // ── LOCATION PERMISSION ──
+  function showLocationModal() {
+    document.getElementById("locationModal").classList.add("show");
+  }
+
+  function allowLocation() {
+    document.getElementById("locationModal").classList.remove("show");
+    locationGranted = true;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function() { showToast("📍 Location access granted!"); },
+        function() { showToast("📍 Using neighborhood name instead."); }
+      );
+    }
+  }
+
+  function denyLocation() {
+    document.getElementById("locationModal").classList.remove("show");
+    showToast("Location not shared. Using neighborhood name.");
+  }
 
   // ── ROLE SELECTION ──
   function chooseRole(role) {
@@ -849,90 +747,87 @@
     }
   }
 
+  function goWelcome() { showScreen("welcomeScreen"); }
+
   // ── HELPER SIGNUP ──
   function finishHelperSignup() {
-    let name = document.getElementById("helperName").value.trim();
-    let age = parseInt(document.getElementById("helperAge").value);
-    let neighborhood = document.getElementById("helperNeighborhood").value.trim();
-    let skills = document.getElementById("helperSkills").value.trim();
-    let parentContact = document.getElementById("parentContact").value.trim();
-    let safetyChecked = document.getElementById("helperSafety").checked;
+    var name = document.getElementById("helperName").value.trim();
+    var age = parseInt(document.getElementById("helperAge").value);
+    var neighborhood = document.getElementById("helperNeighborhood").value.trim();
+    var skills = document.getElementById("helperSkills").value.trim();
+    var parentContact = document.getElementById("parentContact").value.trim();
+    var safetyChecked = document.getElementById("helperSafety").checked;
 
     if (!name) { showToast("Please enter your name."); return; }
-    if (isNaN(age) || age < 13 || age > 17) {
-      showToast("Helpers must be between 13 and 17 years old.");
-      return;
-    }
+    if (isNaN(age) || age < 13 || age > 17) { showToast("Helpers must be 13–17 years old."); return; }
     if (!neighborhood) { showToast("Please enter your neighborhood."); return; }
     if (!skills) { showToast("Please list at least one skill."); return; }
     if (!parentContact) { showToast("Please provide a parent/guardian contact."); return; }
-    if (!safetyChecked) {
-      showToast("Please confirm your parent/guardian is aware.");
-      return;
-    }
+    if (!safetyChecked) { showToast("Please confirm your parent/guardian is aware."); return; }
 
-    currentUser = { name, age, neighborhood, skills, parentContact, role: "helper" };
+    currentUser = { name: name, age: age, neighborhood: neighborhood, skills: skills, parentContact: parentContact, role: "helper" };
     setupProfile();
-    document.getElementById("homeGreeting").innerText = `Hey, ${name}! 👋`;
+    document.getElementById("homeGreeting").innerText = "Hey, " + name + "! 👋";
     document.getElementById("homeMessage").innerText = "Browse safe local jobs near you.";
     document.getElementById("homeRoleBadge").innerText = "Helper";
     document.getElementById("helperHome").style.display = "flex";
     document.getElementById("listerHome").style.display = "none";
-    document.getElementById("familyMessage") && (document.getElementById("familyMessage").innerText = "");
     document.getElementById("helperFamilyTools").style.display = "block";
     document.getElementById("listerFamilyTools").style.display = "none";
+    document.getElementById("chatRequestsSection").style.display = "block";
     enterApp();
+    setTimeout(showLocationModal, 600);
   }
 
   // ── LISTER SIGNUP ──
   function finishListerSignup() {
-    let name = document.getElementById("listerName").value.trim();
-    let age = parseInt(document.getElementById("listerAge").value);
-    let neighborhood = document.getElementById("listerNeighborhood").value.trim();
-    let proof = document.getElementById("listerProof").value.trim();
-    let locationChecked = document.getElementById("listerLocation").checked;
-    let safetyChecked = document.getElementById("listerSafety").checked;
+    var name = document.getElementById("listerName").value.trim();
+    var neighborhood = document.getElementById("listerNeighborhood").value.trim();
+    var proof = document.getElementById("listerProof").value.trim();
+    var locationChecked = document.getElementById("listerLocation").checked;
+    var safetyChecked = document.getElementById("listerSafety").checked;
 
     if (!name) { showToast("Please enter your name."); return; }
     if (!neighborhood) { showToast("Please enter your neighborhood."); return; }
-    if (!locationChecked || !safetyChecked) {
-      showToast("Please agree to both safety terms.");
-      return;
-    }
+    if (!locationChecked || !safetyChecked) { showToast("Please agree to both safety terms."); return; }
 
-    currentUser = { name, age, neighborhood, proof, role: "lister" };
+    currentUser = { name: name, neighborhood: neighborhood, proof: proof, role: "lister" };
     setupProfile();
-    document.getElementById("homeGreeting").innerText = `Hey, ${name}! 👋`;
+    document.getElementById("homeGreeting").innerText = "Hey, " + name + "! 👋";
     document.getElementById("homeMessage").innerText = "Post jobs and find trusted local teens.";
     document.getElementById("homeRoleBadge").innerText = "Lister";
     document.getElementById("listerHome").style.display = "flex";
     document.getElementById("helperHome").style.display = "none";
     document.getElementById("listerFamilyTools").style.display = "block";
     document.getElementById("helperFamilyTools").style.display = "none";
+    document.getElementById("chatRequestsSection").style.display = "none";
     enterApp();
+    setTimeout(showLocationModal, 600);
   }
 
   function setupProfile() {
-    let u = currentUser;
+    var u = currentUser;
     document.getElementById("profileAvatar").innerText = u.name.charAt(0).toUpperCase();
     document.getElementById("profileName").innerText = u.name;
     document.getElementById("profileRoleLabel").innerText = u.role === "helper" ? "Teen Helper" : "Job Lister";
 
-    let rows = "";
+    // stats
+    document.getElementById("statRating").innerText = u.role === "helper" ? "New" : "—";
+    document.getElementById("statJobs").innerText = u.role === "helper" ? "0" : "0";
+    document.getElementById("statResponse").innerText = "< 1hr";
+
+    var rows = "";
     if (u.role === "helper") {
-      rows = `
-        <div class="profile-row"><span class="profile-row-icon">🎂</span><span class="profile-row-label">Age</span><span class="profile-row-value">${u.age}</span></div>
-        <div class="profile-row"><span class="profile-row-icon">📍</span><span class="profile-row-label">Neighborhood</span><span class="profile-row-value">${u.neighborhood}</span></div>
-        <div class="profile-row"><span class="profile-row-icon">⚡</span><span class="profile-row-label">Skills</span><span class="profile-row-value">${u.skills}</span></div>
-        <div class="profile-row"><span class="profile-row-icon">👨‍👩‍👧</span><span class="profile-row-label">Parent Contact</span><span class="profile-row-value">${u.parentContact}</span></div>
-        <div class="profile-row"><span class="profile-row-icon">⭐</span><span class="profile-row-label">Rating</span><span class="profile-row-value">New helper</span></div>
-      `;
+      rows =
+        '<div class="profile-row"><span class="profile-row-icon">🎂</span><span class="profile-row-label">Age</span><span class="profile-row-value">' + u.age + '</span></div>' +
+        '<div class="profile-row"><span class="profile-row-icon">📍</span><span class="profile-row-label">Neighborhood</span><span class="profile-row-value">' + u.neighborhood + '</span></div>' +
+        '<div class="profile-row"><span class="profile-row-icon">⚡</span><span class="profile-row-label">Skills</span><span class="profile-row-value">' + u.skills + '</span></div>' +
+        '<div class="profile-row"><span class="profile-row-icon">👨‍👩‍👧</span><span class="profile-row-label">Parent Contact</span><span class="profile-row-value">' + u.parentContact + '</span></div>';
     } else {
-      rows = `
-        <div class="profile-row"><span class="profile-row-icon">📍</span><span class="profile-row-label">Neighborhood</span><span class="profile-row-value">${u.neighborhood}</span></div>
-        <div class="profile-row"><span class="profile-row-icon">🪪</span><span class="profile-row-label">ID Verified</span><span class="profile-row-value">${u.proof || "Pending"}</span></div>
-        <div class="profile-row"><span class="profile-row-icon">✅</span><span class="profile-row-label">Safety Agreement</span><span class="profile-row-value">Signed</span></div>
-      `;
+      rows =
+        '<div class="profile-row"><span class="profile-row-icon">📍</span><span class="profile-row-label">Neighborhood</span><span class="profile-row-value">' + u.neighborhood + '</span></div>' +
+        '<div class="profile-row"><span class="profile-row-icon">🪪</span><span class="profile-row-label">ID Verified</span><span class="profile-row-value">' + (u.proof || "Pending") + '</span></div>' +
+        '<div class="profile-row"><span class="profile-row-icon">✅</span><span class="profile-row-label">Safety Agreement</span><span class="profile-row-value">Signed</span></div>';
     }
     document.getElementById("profileDetails").innerHTML = rows;
   }
@@ -943,149 +838,109 @@
     setActiveNav("nav-home");
   }
 
-  // ── SCREEN MANAGEMENT ──
-  function showScreen(screenId) {
-    let screens = [
-      "welcomeScreen","signupScreen","homeScreen","jobsScreen",
-      "helpersScreen","postJobScreen","detailsScreen",
-      "profileScreen","familyScreen","supportScreen"
-    ];
-    screens.forEach(id => {
-      let el = document.getElementById(id);
-      el.classList.remove("active");
-      el.style.display = "";
-    });
-    document.getElementById(screenId).classList.add("active");
+  // ── SCREENS ──
+  function showScreen(id) {
+    var all = ["welcomeScreen","signupScreen","homeScreen","jobsScreen",
+               "helpersScreen","postJobScreen","detailsScreen","myJobsScreen",
+               "profileScreen","familyScreen","supportScreen"];
+    all.forEach(function(s) { document.getElementById(s).classList.remove("active"); });
+    document.getElementById(id).classList.add("active");
+    window.scrollTo(0,0);
   }
 
   function showMainPage(pageId) {
-    previousScreen = pageId;
     showScreen(pageId);
-    // Update jobs screen title based on role
     if (pageId === "jobsScreen") {
       document.getElementById("jobsScreenTitle").innerText =
         userRole === "lister" ? "My Posted Jobs" : "Jobs Near You";
     }
   }
 
-  function goBack(screenId) {
-    showScreen(screenId);
-  }
-
   function setActiveNav(id) {
-    document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".nav-btn").forEach(function(b) { b.classList.remove("active"); });
     document.getElementById(id).classList.add("active");
   }
 
   // ── JOB QUESTIONS ──
   function updateJobQuestions() {
-    let jobType = document.getElementById("jobType").value;
-    let extra = document.getElementById("extraQuestions");
+    var type = document.getElementById("jobType").value;
+    var extra = document.getElementById("extraQuestions");
     extra.innerHTML = "";
-    if (!jobType) return;
-
-    let fields = [];
-    if (jobType === "Babysitting") {
-      fields = ["Number of children", "Ages of children"];
-    } else if (jobType === "Pet Sitting" || jobType === "Dog Walking") {
-      fields = ["Number and type of pets", "Any pet allergies or restrictions"];
-    } else if (jobType === "Plant Watering") {
-      fields = ["Indoor or outdoor plants?", "How many days?"];
-    } else if (jobType === "Tutoring") {
-      fields = ["Subject(s) needed", "Grade level"];
-    } else {
-      fields = ["Extra detail 1", "Extra detail 2"];
-    }
-
-    fields.forEach((placeholder, i) => {
-      extra.innerHTML += `
-        <div>
-          <div class="field-label">${placeholder}</div>
-          <input type="text" id="extra${i}" placeholder="${placeholder}">
-        </div>`;
+    var fields = [];
+    if (type === "Babysitting") fields = ["Number of children","Ages of children"];
+    else if (type === "Pet Sitting" || type === "Dog Walking") fields = ["Number and type of pets","Any allergies or restrictions"];
+    else if (type === "Plant Watering") fields = ["Indoor or outdoor?","How many days?"];
+    else if (type === "Tutoring") fields = ["Subject(s)","Grade level"];
+    else if (type) fields = ["Extra detail 1","Extra detail 2"];
+    fields.forEach(function(label, i) {
+      extra.innerHTML += '<div><div class="field-label">' + label + '</div><input type="text" id="extra' + i + '" placeholder="' + label + '"></div>';
     });
   }
 
   // ── SUBMIT JOB ──
   function submitJob() {
     if (userRole !== "lister") { showToast("Only listers can post jobs."); return; }
-
-    let type = document.getElementById("jobType").value;
-    let pay = document.getElementById("jobPay").value.trim();
-    let intensity = document.getElementById("jobIntensity").value;
-    let ageRange = document.getElementById("jobAgeRange").value.trim();
-    let date = document.getElementById("jobDate").value.trim();
-    let neighborhood = document.getElementById("jobNeighborhood").value.trim();
-    let notes = document.getElementById("jobNotes").value.trim();
-
+    var type = document.getElementById("jobType").value;
+    var pay = document.getElementById("jobPay").value.trim();
+    var intensity = document.getElementById("jobIntensity").value;
+    var ageRange = document.getElementById("jobAgeRange").value.trim();
+    var neighborhood = document.getElementById("jobNeighborhood").value.trim();
+    var notes = document.getElementById("jobNotes").value.trim();
     if (!type) { showToast("Please choose a job type."); return; }
     if (!pay) { showToast("Please enter a pay amount."); return; }
     if (!neighborhood) { showToast("Please enter a neighborhood."); return; }
 
-    let extra0 = document.getElementById("extra0") ? document.getElementById("extra0").value : "";
-    let extra1 = document.getElementById("extra1") ? document.getElementById("extra1").value : "";
-    let emoji = { "Babysitting":"👶","Pet Sitting":"🐱","Dog Walking":"🐕","Plant Watering":"🌱","Package Pickup":"📦","Yard Work":"🍂","Tutoring":"📚","Other":"🔧" };
+    var emojis = {"Babysitting":"👶","Pet Sitting":"🐱","Dog Walking":"🐕","Plant Watering":"🌱","Package Pickup":"📦","Yard Work":"🍂","Tutoring":"📚","Other":"🔧"};
+    var e = emojis[type] || "🔧";
+    var extra0 = document.getElementById("extra0") ? document.getElementById("extra0").value : "";
+    var extra1 = document.getElementById("extra1") ? document.getElementById("extra1").value : "";
+    var combinedNotes = [notes, extra0, extra1].filter(Boolean).join(" · ");
 
-    let newCard = document.createElement("div");
-    newCard.className = "job-card";
-    newCard.innerHTML = `
-      <div class="job-card-top">
-        <div class="job-title">${emoji[type] || "🔧"} ${type}</div>
-        <div class="pay-badge">${pay}</div>
-      </div>
-      <div class="job-tags">
-        ${intensity ? `<span class="tag">${intensity}</span>` : ""}
-        ${ageRange ? `<span class="tag">Ages ${ageRange}</span>` : ""}
-        <span class="tag">📍 ${neighborhood}</span>
-      </div>
-    `;
-    newCard.onclick = function() {
-      openJobDetails(type, pay, intensity, ageRange, neighborhood, `${notes} ${extra0} ${extra1}`.trim());
-    };
-
-    document.getElementById("jobsList").appendChild(newCard);
+    var card = document.createElement("div");
+    card.className = "job-card";
+    card.innerHTML =
+      '<div class="job-card-top"><div class="job-title">' + e + ' ' + type + '</div><div class="pay-badge">' + pay + '</div></div>' +
+      '<div class="job-tags">' +
+      (intensity ? '<span class="tag">' + intensity + '</span>' : '') +
+      (ageRange ? '<span class="tag">Ages ' + ageRange + '</span>' : '') +
+      '<span class="tag">📍 ' + neighborhood + '</span></div>';
+    var capturedArgs = [type, pay, intensity, ageRange, neighborhood, combinedNotes];
+    card.onclick = function() { openJobDetails.apply(null, capturedArgs); };
+    document.getElementById("jobsList").appendChild(card);
     showToast("✅ Job posted!");
     showMainPage("jobsScreen");
   }
 
-  // ── OPEN JOB DETAILS ──
+  // ── DETAILS ──
   function openJobDetails(title, pay, intensity, ageRange, neighborhood, notes) {
     document.getElementById("detailsTypeBadge").innerText = "Job";
     document.getElementById("detailsTitle").innerText = title;
-    document.getElementById("detailsBackBtn").onclick = () => showMainPage("jobsScreen");
-
-    document.getElementById("detailsInfoCard").innerHTML = `
-      <div class="details-row"><span class="details-row-icon">💵</span><span class="details-row-label">Pay</span><span class="details-row-value">${pay}</span></div>
-      <div class="details-row"><span class="details-row-icon">⚡</span><span class="details-row-label">Difficulty</span><span class="details-row-value">${intensity || "Not listed"}</span></div>
-      <div class="details-row"><span class="details-row-icon">🎂</span><span class="details-row-label">Age Range</span><span class="details-row-value">${ageRange || "Open"}</span></div>
-      <div class="details-row"><span class="details-row-icon">📍</span><span class="details-row-label">Area</span><span class="details-row-value">${neighborhood}</span></div>
-      ${notes ? `<div class="details-row"><span class="details-row-icon">📝</span><span class="details-row-label">Notes</span><span class="details-row-value" style="max-width:55%; text-align:right;">${notes}</span></div>` : ""}
-    `;
-
-    let btn = document.getElementById("requestButton");
+    document.getElementById("detailsBackBtn").onclick = function() { showMainPage("jobsScreen"); };
+    document.getElementById("detailsInfoCard").innerHTML =
+      '<div class="details-row"><span class="details-row-icon">💵</span><span class="details-row-label">Pay</span><span class="details-row-value">' + pay + '</span></div>' +
+      '<div class="details-row"><span class="details-row-icon">⚡</span><span class="details-row-label">Difficulty</span><span class="details-row-value">' + (intensity||"Not listed") + '</span></div>' +
+      '<div class="details-row"><span class="details-row-icon">🎂</span><span class="details-row-label">Age Range</span><span class="details-row-value">' + (ageRange||"Open") + '</span></div>' +
+      '<div class="details-row"><span class="details-row-icon">📍</span><span class="details-row-label">Area</span><span class="details-row-value">' + neighborhood + '</span></div>' +
+      (notes ? '<div class="details-row"><span class="details-row-icon">📝</span><span class="details-row-label">Notes</span><span class="details-row-value">' + notes + '</span></div>' : '');
+    var btn = document.getElementById("requestButton");
+    btn.innerText = "Apply for This Job";
     btn.style.display = userRole === "helper" ? "block" : "none";
     showScreen("detailsScreen");
   }
 
-  // ── OPEN HELPER DETAILS ──
   function openHelperDetails(name, age, neighborhood, skills, rating) {
-    // Only listers should be able to request helpers
     document.getElementById("detailsTypeBadge").innerText = "Helper";
     document.getElementById("detailsTitle").innerText = name;
-    document.getElementById("detailsBackBtn").onclick = () => showMainPage("helpersScreen");
-
-    document.getElementById("detailsInfoCard").innerHTML = `
-      <div class="details-row"><span class="details-row-icon">🎂</span><span class="details-row-label">Age</span><span class="details-row-value">${age}</span></div>
-      <div class="details-row"><span class="details-row-icon">📍</span><span class="details-row-label">Area</span><span class="details-row-value">${neighborhood}</span></div>
-      <div class="details-row"><span class="details-row-icon">⚡</span><span class="details-row-label">Skills</span><span class="details-row-value">${skills}</span></div>
-      <div class="details-row"><span class="details-row-icon">⭐</span><span class="details-row-label">Rating</span><span class="details-row-value">${rating} / 5</span></div>
-      <div class="details-row"><span class="details-row-icon">✅</span><span class="details-row-label">Verified</span><span class="details-row-value">Family verified</span></div>
-    `;
-
-    let btn = document.getElementById("requestButton");
-    // Only listers can request helpers; helpers can't request each other
-    btn.style.display = userRole === "lister" ? "block" : "none";
+    document.getElementById("detailsBackBtn").onclick = function() { showMainPage("helpersScreen"); };
+    document.getElementById("detailsInfoCard").innerHTML =
+      '<div class="details-row"><span class="details-row-icon">🎂</span><span class="details-row-label">Age</span><span class="details-row-value">' + age + '</span></div>' +
+      '<div class="details-row"><span class="details-row-icon">📍</span><span class="details-row-label">Area</span><span class="details-row-value">' + neighborhood + '</span></div>' +
+      '<div class="details-row"><span class="details-row-icon">⚡</span><span class="details-row-label">Skills</span><span class="details-row-value">' + skills + '</span></div>' +
+      '<div class="details-row"><span class="details-row-icon">⭐</span><span class="details-row-label">Rating</span><span class="details-row-value">' + rating + ' / 5</span></div>' +
+      '<div class="details-row"><span class="details-row-icon">✅</span><span class="details-row-label">Verified</span><span class="details-row-value">Family verified</span></div>';
+    var btn = document.getElementById("requestButton");
     btn.innerText = "Request This Helper";
+    btn.style.display = userRole === "lister" ? "block" : "none";
     showScreen("detailsScreen");
   }
 
@@ -1093,27 +948,54 @@
     showToast("✅ Request sent! Info unlocks after both confirm.");
   }
 
+  // ── MY JOBS FILTER ──
+  function filterMyJobs(status, btn) {
+    document.querySelectorAll(".tab-btn").forEach(function(b) { b.classList.remove("active"); });
+    btn.classList.add("active");
+    var cards = document.querySelectorAll("#myJobsList .job-card");
+    cards.forEach(function(card) {
+      if (status === "all" || card.getAttribute("data-status") === status) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  }
+
+  // ── CHAT REQUESTS ──
+  function acceptChat(btn) {
+    var card = btn.closest(".chat-request-card");
+    var name = card.querySelector(".chat-request-name").innerText;
+    card.remove();
+    showToast("✅ Chat with " + name + " unlocked!");
+    checkNoChatRequests();
+  }
+
+  function declineChat(btn) {
+    var card = btn.closest(".chat-request-card");
+    card.remove();
+    showToast("Chat request declined.");
+    checkNoChatRequests();
+  }
+
+  function checkNoChatRequests() {
+    var remaining = document.querySelectorAll("#chatRequestsList .chat-request-card");
+    if (remaining.length === 0) {
+      document.getElementById("noChatRequests").style.display = "block";
+    }
+  }
+
   // ── ADD CHILD ──
   function addChild() {
-    let name = document.getElementById("childName").value.trim();
-    let age = parseInt(document.getElementById("childAge").value);
-    let skills = document.getElementById("childSkills").value.trim();
-
+    var name = document.getElementById("childName").value.trim();
+    var age = parseInt(document.getElementById("childAge").value);
+    var skills = document.getElementById("childSkills").value.trim();
     if (!name) { showToast("Please enter a name."); return; }
-    if (isNaN(age) || age < 13 || age > 17) {
-      showToast("Child must be between 13 and 17.");
-      return;
-    }
-
-    let card = document.createElement("div");
+    if (isNaN(age) || age < 13 || age > 17) { showToast("Child must be 13–17 years old."); return; }
+    var card = document.createElement("div");
     card.className = "child-card";
-    card.innerHTML = `
-      <h4>${name.charAt(0).toUpperCase() + name.slice(1)}</h4>
-      <p>Age ${age} · ${skills || "No skills listed"}</p>
-      <p style="margin-top:4px; font-size:12px; color:var(--green); font-weight:700;">✅ Connected to family account</p>
-    `;
+    card.innerHTML = '<h4>' + name + '</h4><p>Age ' + age + ' · ' + (skills||"No skills listed") + '</p><p style="margin-top:4px;font-size:12px;color:var(--coral);font-weight:700;">✅ Connected to family account</p>';
     document.getElementById("childList").appendChild(card);
-
     document.getElementById("childName").value = "";
     document.getElementById("childAge").value = "";
     document.getElementById("childSkills").value = "";
@@ -1122,10 +1004,10 @@
 
   // ── TOAST ──
   function showToast(msg) {
-    let t = document.getElementById("toast");
+    var t = document.getElementById("toast");
     t.innerText = msg;
     t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 2800);
+    setTimeout(function() { t.classList.remove("show"); }, 2800);
   }
 </script>
 </body>
