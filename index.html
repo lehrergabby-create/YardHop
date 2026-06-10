@@ -1,397 +1,1132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YardHop</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+    :root {
+      --green: #3d8c5f;
+      --green-light: #e8f5ee;
+      --green-mid: #c3e6d0;
+      --yellow: #f5c842;
+      --yellow-light: #fffbe8;
+      --text: #1a2e1f;
+      --text-soft: #5a7063;
+      --bg: #f7faf8;
+      --white: #ffffff;
+      --border: #d4e8db;
+      --red: #e05c5c;
+      --card-shadow: 0 2px 12px rgba(61,140,95,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      max-width: 430px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ── SCREENS ── */
+    .screen { display: none; padding: 24px 20px 100px; min-height: 100vh; }
+    .screen.active { display: block; }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px 0;
+      margin-bottom: 4px;
+    }
+    .topbar-logo { font-size: 22px; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
+    .topbar-logo span { color: var(--yellow); }
+    .topbar-role-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--green-light);
+      color: var(--green);
+      border-radius: 20px;
+      padding: 4px 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── WELCOME ── */
+    #welcomeScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 28px;
+      text-align: center;
+    }
+    .welcome-icon { font-size: 64px; margin-bottom: 12px; }
+    .welcome-title { font-size: 36px; font-weight: 900; color: var(--green); line-height: 1.1; margin-bottom: 8px; }
+    .welcome-title span { color: var(--yellow); }
+    .welcome-sub { font-size: 15px; color: var(--text-soft); margin-bottom: 40px; line-height: 1.5; }
+    .welcome-buttons { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 800;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      width: 100%;
+    }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:hover { background: #2f7049; }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--green);
+      border: 2px solid var(--green);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s;
+      width: 100%;
+    }
+    .btn-secondary:hover { background: var(--green-light); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-soft);
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ── FORMS ── */
+    .screen-title { font-size: 24px; font-weight: 900; margin-bottom: 6px; color: var(--text); }
+    .screen-sub { font-size: 14px; color: var(--text-soft); margin-bottom: 24px; }
+    .form-group { display: flex; flex-direction: column; gap: 12px; }
+    .field-label { font-size: 12px; font-weight: 800; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+    input[type="text"], input[type="number"], input[type="email"], input[type="tel"], select, textarea {
+      width: 100%;
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 14px;
+      font-size: 15px;
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--green); }
+    textarea { resize: vertical; min-height: 80px; }
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--green-light);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      accent-color: var(--green);
+      margin-top: 1px;
+      border: none;
+      padding: 0;
+    }
+    .checkbox-row label { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; cursor: pointer; }
+    .form-actions { margin-top: 8px; display: flex; flex-direction: column; gap: 10px; }
+
+    /* ── HOME ── */
+    .home-greeting { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+    .home-sub { font-size: 14px; color: var(--text-soft); margin-bottom: 24px; }
+    .home-grid { display: flex; flex-direction: column; gap: 12px; }
+    .home-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.1s;
+    }
+    .home-card:hover { border-color: var(--green-mid); }
+    .home-card:active { transform: scale(0.98); }
+    .home-card-icon { font-size: 32px; }
+    .home-card-title { font-size: 16px; font-weight: 800; }
+    .home-card-sub { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
+
+    /* ── SECTION HEADER ── */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-header h2 { font-size: 22px; font-weight: 900; }
+
+    /* ── SAFETY BANNER ── */
+    .safety-banner {
+      background: var(--yellow-light);
+      border: 1.5px solid var(--yellow);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #7a6010;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    /* ── JOB / HELPER CARDS ── */
+    .scroll-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+    .job-card, .helper-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.1s;
+    }
+    .job-card:hover, .helper-card:hover { border-color: var(--green-mid); }
+    .job-card:active, .helper-card:active { transform: scale(0.98); }
+    .job-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .job-title { font-size: 17px; font-weight: 800; }
+    .pay-badge {
+      background: var(--green);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      border-radius: 8px;
+      padding: 3px 10px;
+    }
+    .job-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tag {
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 3px 10px;
+    }
+    .helper-top { display: flex; align-items: center; gap: 14px; }
+    .helper-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    .helper-name { font-size: 17px; font-weight: 800; }
+    .helper-meta { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #e8f5ee;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 2px 8px;
+      margin-top: 6px;
+    }
+
+    /* ── DETAILS SCREEN ── */
+    .details-type-badge {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 8px;
+      padding: 4px 12px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .details-title { font-size: 26px; font-weight: 900; margin-bottom: 12px; }
+    .details-section { background: var(--white); border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: var(--card-shadow); }
+    .details-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+    .details-row:last-child { border-bottom: none; }
+    .details-row-icon { font-size: 18px; width: 24px; text-align: center; }
+    .details-row-label { font-weight: 700; }
+    .details-row-value { color: var(--text-soft); margin-left: auto; font-size: 14px; }
+    .address-locked {
+      background: var(--yellow-light);
+      border: 1.5px solid var(--yellow);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #7a6010;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ── POST JOB ── */
+    .post-form { display: flex; flex-direction: column; gap: 14px; }
+
+    /* ── PROFILE ── */
+    .profile-header {
+      background: var(--green);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      color: white;
+      margin-bottom: 20px;
+    }
+    .profile-avatar {
+      width: 72px;
+      height: 72px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 900;
+      margin: 0 auto 12px;
+    }
+    .profile-name { font-size: 22px; font-weight: 900; }
+    .profile-role { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+    .profile-card { background: var(--white); border-radius: 14px; padding: 16px; box-shadow: var(--card-shadow); margin-bottom: 12px; }
+    .profile-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+    .profile-row:last-child { border-bottom: none; }
+    .profile-row-icon { font-size: 18px; }
+    .profile-row-label { font-weight: 700; flex: 1; }
+    .profile-row-value { color: var(--text-soft); font-size: 14px; }
+
+    /* ── FAMILY / SUPPORT ── */
+    .placeholder-box {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      color: var(--text-soft);
+    }
+    .placeholder-box .placeholder-icon { font-size: 40px; margin-bottom: 12px; }
+    .placeholder-box p { font-size: 14px; line-height: 1.6; }
+
+    .child-card { background: var(--green-light); border-radius: 12px; padding: 14px; margin-top: 10px; }
+    .child-card h4 { font-size: 15px; font-weight: 800; color: var(--green); }
+    .child-card p { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
+
+    /* ── BOTTOM NAV ── */
+    #bottomNav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: var(--white);
+      border-top: 1.5px solid var(--border);
+      padding: 10px 0 18px;
+      z-index: 100;
+    }
+    .nav-items { display: flex; justify-content: space-around; }
+    .nav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 4px 12px;
+      border-radius: 10px;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover { background: var(--green-light); }
+    .nav-btn.active .nav-icon { color: var(--green); }
+    .nav-btn.active .nav-label { color: var(--green); font-weight: 800; }
+    .nav-icon { font-size: 22px; color: #9ab8a5; }
+    .nav-label { font-size: 11px; font-weight: 700; color: #9ab8a5; font-family: 'Nunito', sans-serif; }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-soft);
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-soft);
+    }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; line-height: 1.6; }
+
+    /* ── SUCCESS TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 14px;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); margin: 8px 0; }
+  </style>
 </head>
-
 <body>
-  <h1>YardHop</h1>
-  <p>Safe local help for families and teen helpers.</p>
 
-  <!-- WELCOME -->
-  <div id="welcomeScreen">
-    <h2>Welcome</h2>
-    <button onclick="chooseRole('lister')">I Need Help</button>
-    <button onclick="chooseRole('helper')">I Want To Help</button>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════ WELCOME -->
+<div id="welcomeScreen" class="active">
+  <div class="welcome-icon">🌿</div>
+  <div class="welcome-title">Yard<span>Hop</span></div>
+  <p class="welcome-sub">Safe local jobs for teens.<br>Trusted help for families.</p>
+  <div class="welcome-buttons">
+    <button class="btn-primary" onclick="chooseRole('helper')">🙋 I Want to Help</button>
+    <button class="btn-secondary" onclick="chooseRole('lister')">📋 I Need Help</button>
   </div>
+</div>
 
-  <!-- SIGNUP -->
-  <div id="signupScreen" style="display:none;">
-    <h2 id="signupTitle">Create Account</h2>
+<!-- ═══════════════════════════════════════ SIGNUP -->
+<div id="signupScreen" class="screen">
+  <h1 class="screen-title" id="signupTitle">Create Account</h1>
+  <p class="screen-sub" id="signupSub"></p>
 
-    <div id="helperSignup" style="display:none;">
-      <input id="helperName" placeholder="Your name">
-      <input id="helperAge" placeholder="Age">
-      <input id="helperNeighborhood" placeholder="Neighborhood">
-      <input id="helperSkills" placeholder="Skills">
-      <input id="parentContact" placeholder="Parent/guardian phone or email">
-
-      <p>
+  <!-- HELPER SIGNUP -->
+  <div id="helperSignup" style="display:none;">
+    <div class="form-group">
+      <div>
+        <div class="field-label">Your Name</div>
+        <input type="text" id="helperName" placeholder="First name">
+      </div>
+      <div>
+        <div class="field-label">Your Age (13–17)</div>
+        <input type="number" id="helperAge" placeholder="Age" min="13" max="17">
+      </div>
+      <div>
+        <div class="field-label">Neighborhood</div>
+        <input type="text" id="helperNeighborhood" placeholder="e.g. Maple Grove">
+      </div>
+      <div>
+        <div class="field-label">Your Skills</div>
+        <input type="text" id="helperSkills" placeholder="e.g. yard work, dog walking">
+      </div>
+      <div>
+        <div class="field-label">Parent / Guardian Contact</div>
+        <input type="text" id="parentContact" placeholder="Phone or email">
+      </div>
+      <div class="checkbox-row">
         <input type="checkbox" id="helperSafety">
-        My parent/guardian knows I am using YardHop.
-      </p>
-
-      <button onclick="finishHelperSignup()">Create Helper Account</button>
+        <label for="helperSafety">My parent or guardian knows I am using YardHop and approves.</label>
+      </div>
     </div>
+    <div class="form-actions">
+      <button class="btn-primary" onclick="finishHelperSignup()">Create Helper Account →</button>
+      <button class="btn-ghost" onclick="goBack('welcomeScreen')">← Back</button>
+    </div>
+  </div>
 
-    <div id="listerSignup" style="display:none;">
-      <input id="listerName" placeholder="Full name">
-      <input id="listerAge" placeholder="Age">
-      <input id="listerNeighborhood" placeholder="Neighborhood">
-      <input id="listerProof" placeholder="Proof of age / ID placeholder">
-
-      <p>
+  <!-- LISTER SIGNUP -->
+  <div id="listerSignup" style="display:none;">
+    <div class="form-group">
+      <div>
+        <div class="field-label">Full Name</div>
+        <input type="text" id="listerName" placeholder="Your name">
+      </div>
+      <div>
+        <div class="field-label">Your Age</div>
+        <input type="number" id="listerAge" placeholder="Age" min="18">
+      </div>
+      <div>
+        <div class="field-label">Neighborhood</div>
+        <input type="text" id="listerNeighborhood" placeholder="e.g. Maple Grove">
+      </div>
+      <div>
+        <div class="field-label">Proof of Age / ID</div>
+        <input type="text" id="listerProof" placeholder="ID type (e.g. Driver's License)">
+      </div>
+      <div class="checkbox-row">
         <input type="checkbox" id="listerLocation">
-        I agree to location verification while using the app.
-      </p>
-
-      <p>
+        <label for="listerLocation">I agree to location verification while using YardHop.</label>
+      </div>
+      <div class="checkbox-row">
         <input type="checkbox" id="listerSafety">
-        I agree not to share exact addresses until a match is confirmed.
-      </p>
-
-      <button onclick="finishListerSignup()">Create Lister Account</button>
-    </div>
-  </div>
-
-  <!-- HOME -->
-  <div id="homeScreen" style="display:none;">
-    <h2>Home</h2>
-    <p id="homeMessage"></p>
-
-    <div id="listerHome" style="display:none;">
-      <button onclick="showMainPage('helpersScreen')">Helpers</button>
-      <button onclick="showMainPage('jobsScreen')">Jobs Near You</button>
-      <button onclick="showMainPage('postJobScreen')">+ Post a Job</button>
-    </div>
-
-    <div id="helperHome" style="display:none;">
-      <button onclick="showMainPage('jobsScreen')">Jobs Near You</button>
-    </div>
-  </div>
-
-  <!-- JOBS NEAR YOU -->
-  <div id="jobsScreen" style="display:none;">
-    <h2>Jobs Near You</h2>
-    <p>Exact addresses unlock only after both sides confirm a match.</p>
-
-    <div id="jobsList">
-      <div onclick="openJobDetails('Water Plants', 'Easy plant watering job while a family is away. Pay: $15. Age range: 13-17.')">
-        <h3>Water Plants</h3>
-        <p>$15 · Easy · Ages 13-17 · Nearby neighborhood</p>
-      </div>
-
-      <div onclick="openJobDetails('Dog Walking', 'Walk one friendly dog around the neighborhood. Pay: $20. Intensity: Medium. Age range: 14-17.')">
-        <h3>Dog Walking</h3>
-        <p>$20 · Medium · Ages 14-17 · Nearby neighborhood</p>
+        <label for="listerSafety">I agree not to share exact addresses until a match is confirmed.</label>
       </div>
     </div>
-  </div>
-
-  <!-- HELPERS -->
-  <div id="helpersScreen" style="display:none;">
-    <h2>Helpers</h2>
-    <p>Browse verified teen helpers nearby.</p>
-
-    <div onclick="openHelperDetails('Ava', 'Skills: Babysitting, tutoring, pet care. Rating: 5 stars. Family verified.')">
-      <h3>Ava</h3>
-      <p>Babysitting · Tutoring · Pet Care</p>
-    </div>
-
-    <div onclick="openHelperDetails('Leo', 'Skills: Yard work, dog walking, carrying packages. Rating: 4 stars. Family verified.')">
-      <h3>Leo</h3>
-      <p>Yard Work · Dog Walking · Packages</p>
+    <div class="form-actions">
+      <button class="btn-primary" onclick="finishListerSignup()">Create Lister Account →</button>
+      <button class="btn-ghost" onclick="goBack('welcomeScreen')">← Back</button>
     </div>
   </div>
+</div>
 
-  <!-- POST JOB -->
-  <div id="postJobScreen" style="display:none;">
-    <h2>Post a Job</h2>
-
-    <select id="jobType" onchange="updateJobQuestions()">
-      <option value="">Choose job type</option>
-      <option value="Babysitting">Babysitting</option>
-      <option value="Pet Sitting">Pet Sitting</option>
-      <option value="Dog Walking">Dog Walking</option>
-      <option value="Plant Watering">Plant Watering</option>
-      <option value="Package Pickup">Package Pickup</option>
-      <option value="Yard Work">Yard Work</option>
-      <option value="Tutoring">Tutoring</option>
-      <option value="Other">Other</option>
-    </select>
-
-    <input id="jobPay" placeholder="Pay, like $20">
-    <input id="jobIntensity" placeholder="Intensity: easy, medium, hard">
-    <input id="jobAgeRange" placeholder="Preferred age range, like 14-17">
-    <input id="jobDate" placeholder="Date/time needed">
-    <input id="jobNeighborhood" placeholder="Neighborhood only, no exact address">
-
-    <div id="extraQuestions"></div>
-
-    <textarea id="jobNotes" placeholder="Extra notes or restrictions"></textarea>
-
-    <button onclick="submitJob()">Submit Job</button>
+<!-- ═══════════════════════════════════════ HOME -->
+<div id="homeScreen" class="screen">
+  <div class="topbar" style="padding:0 0 0 0; margin-bottom: 20px;">
+    <div>
+      <div class="home-greeting" id="homeGreeting">Hey there 👋</div>
+      <div class="home-sub" id="homeMessage"></div>
+    </div>
+    <span class="topbar-role-badge" id="homeRoleBadge"></span>
   </div>
 
-  <!-- DETAILS -->
-  <div id="detailsScreen" style="display:none;">
-    <h2 id="detailsTitle"></h2>
-    <p id="detailsText"></p>
-
-    <button id="requestButton" onclick="requestMatch()">Request Match</button>
-    <button onclick="showMainPage('homeScreen')">Back Home</button>
-  </div>
-
-  <!-- PROFILE -->
-  <div id="profileScreen" style="display:none;">
-    <h2>Profile</h2>
-    <p id="profileInfo"></p>
-  </div>
-
-  <!-- FAMILY -->
-  <div id="familyScreen" style="display:none;">
-    <h2>Family</h2>
-    <p id="familyMessage"></p>
-
-    <div id="listerFamilyTools" style="display:none;">
-      <h3>Add Child Helper Account</h3>
-      <input id="childName" placeholder="Child name">
-      <input id="childAge" placeholder="Child age">
-      <input id="childSkills" placeholder="Child skills">
-      <button onclick="addChild()">Add Child</button>
-
-      <div id="childList"></div>
+  <div class="home-grid" id="listerHome" style="display:none;">
+    <div class="home-card" onclick="showMainPage('postJobScreen')">
+      <div class="home-card-icon">➕</div>
+      <div>
+        <div class="home-card-title">Post a Job</div>
+        <div class="home-card-sub">Get help from a teen nearby</div>
+      </div>
+    </div>
+    <div class="home-card" onclick="showMainPage('jobsScreen')">
+      <div class="home-card-icon">📋</div>
+      <div>
+        <div class="home-card-title">My Posted Jobs</div>
+        <div class="home-card-sub">View and manage your listings</div>
+      </div>
+    </div>
+    <div class="home-card" onclick="showMainPage('helpersScreen')">
+      <div class="home-card-icon">🙋</div>
+      <div>
+        <div class="home-card-title">Browse Helpers</div>
+        <div class="home-card-sub">Find verified teens nearby</div>
+      </div>
     </div>
   </div>
 
-  <!-- SUPPORT -->
-  <div id="supportScreen" style="display:none;">
-    <h2>Support</h2>
-    <p>FAQs, safety rules, reviews, report a problem, and contact support will go here.</p>
+  <div class="home-grid" id="helperHome" style="display:none;">
+    <div class="home-card" onclick="showMainPage('jobsScreen')">
+      <div class="home-card-icon">🔍</div>
+      <div>
+        <div class="home-card-title">Find Jobs Near You</div>
+        <div class="home-card-sub">Browse safe local gigs</div>
+      </div>
+    </div>
+    <div class="home-card" onclick="showMainPage('profileScreen')">
+      <div class="home-card-icon">⭐</div>
+      <div>
+        <div class="home-card-title">My Profile</div>
+        <div class="home-card-sub">View your skills and ratings</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ JOBS -->
+<div id="jobsScreen" class="screen">
+  <button class="back-btn" onclick="showMainPage('homeScreen')">← Back</button>
+  <div class="section-header">
+    <h2 id="jobsScreenTitle">Jobs Near You</h2>
   </div>
 
-  <!-- BOTTOM NAV -->
-  <div id="bottomNav" style="display:none;">
-    <hr>
-    <button onclick="showMainPage('homeScreen')">Home</button>
-    <button onclick="showMainPage('profileScreen')">Profile</button>
-    <button onclick="showMainPage('familyScreen')">Family</button>
-    <button onclick="showMainPage('supportScreen')">Support</button>
+  <div class="safety-banner">
+    🔒 Exact addresses unlock only after both sides confirm a match.
   </div>
 
-  <script>
-    let userRole = "";
+  <div class="scroll-list" id="jobsList">
+    <!-- Seeded jobs -->
+    <div class="job-card" onclick="openJobDetails('Water Plants', '$15', 'Easy', '13–17', 'Maple Grove', 'Easy plant watering while a family is away. Everything labeled. Just water and leave.')">
+      <div class="job-card-top">
+        <div class="job-title">🌱 Water Plants</div>
+        <div class="pay-badge">$15</div>
+      </div>
+      <div class="job-tags">
+        <span class="tag">Easy</span>
+        <span class="tag">Ages 13–17</span>
+        <span class="tag">📍 Maple Grove</span>
+      </div>
+    </div>
 
-    function chooseRole(role) {
-      userRole = role;
-      document.getElementById("welcomeScreen").style.display = "none";
-      document.getElementById("signupScreen").style.display = "block";
+    <div class="job-card" onclick="openJobDetails('Dog Walking', '$20', 'Medium', '14–17', 'Elm Street area', 'Walk one friendly golden retriever around the block. About 30 minutes. Dog is leash-trained.')">
+      <div class="job-card-top">
+        <div class="job-title">🐕 Dog Walking</div>
+        <div class="pay-badge">$20</div>
+      </div>
+      <div class="job-tags">
+        <span class="tag">Medium</span>
+        <span class="tag">Ages 14–17</span>
+        <span class="tag">📍 Elm Street area</span>
+      </div>
+    </div>
 
-      if (role === "helper") {
-        document.getElementById("signupTitle").innerText = "Create Helper Account";
-        document.getElementById("helperSignup").style.display = "block";
-        document.getElementById("listerSignup").style.display = "none";
-      } else {
-        document.getElementById("signupTitle").innerText = "Create Job Lister Account";
-        document.getElementById("listerSignup").style.display = "block";
-        document.getElementById("helperSignup").style.display = "none";
-      }
+    <div class="job-card" onclick="openJobDetails('Yard Cleanup', '$30', 'Medium', '14–17', 'Birchwood', 'Rake leaves and bag them in the front and back yard. Bags provided.')">
+      <div class="job-card-top">
+        <div class="job-title">🍂 Yard Cleanup</div>
+        <div class="pay-badge">$30</div>
+      </div>
+      <div class="job-tags">
+        <span class="tag">Medium</span>
+        <span class="tag">Ages 14–17</span>
+        <span class="tag">📍 Birchwood</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ HELPERS -->
+<div id="helpersScreen" class="screen">
+  <button class="back-btn" onclick="showMainPage('homeScreen')">← Back</button>
+  <div class="section-header">
+    <h2>Teen Helpers</h2>
+  </div>
+
+  <div class="safety-banner">
+    ✅ All helpers are family-verified teens in your area.
+  </div>
+
+  <div class="scroll-list" id="helpersList">
+    <div class="helper-card" onclick="openHelperDetails('Ava', '16', 'Maple Grove', 'Babysitting, tutoring, pet care', '5.0')">
+      <div class="helper-top">
+        <div class="helper-avatar">A</div>
+        <div>
+          <div class="helper-name">Ava</div>
+          <div class="helper-meta">Age 16 · Maple Grove</div>
+          <div class="verified-badge">✅ Family verified</div>
+        </div>
+        <div style="margin-left:auto; font-size:13px; font-weight:800; color:var(--green);">⭐ 5.0</div>
+      </div>
+      <div class="job-tags" style="margin-top:12px;">
+        <span class="tag">Babysitting</span>
+        <span class="tag">Tutoring</span>
+        <span class="tag">Pet Care</span>
+      </div>
+    </div>
+
+    <div class="helper-card" onclick="openHelperDetails('Leo', '15', 'Elm Street area', 'Yard work, dog walking, packages', '4.8')">
+      <div class="helper-top">
+        <div class="helper-avatar">L</div>
+        <div>
+          <div class="helper-name">Leo</div>
+          <div class="helper-meta">Age 15 · Elm Street area</div>
+          <div class="verified-badge">✅ Family verified</div>
+        </div>
+        <div style="margin-left:auto; font-size:13px; font-weight:800; color:var(--green);">⭐ 4.8</div>
+      </div>
+      <div class="job-tags" style="margin-top:12px;">
+        <span class="tag">Yard Work</span>
+        <span class="tag">Dog Walking</span>
+        <span class="tag">Packages</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ POST JOB -->
+<div id="postJobScreen" class="screen">
+  <button class="back-btn" onclick="showMainPage('homeScreen')">← Back</button>
+  <h1 class="screen-title">Post a Job</h1>
+  <p class="screen-sub">Only your neighborhood is shown — exact address is private until match.</p>
+
+  <div class="post-form">
+    <div>
+      <div class="field-label">Job Type</div>
+      <select id="jobType" onchange="updateJobQuestions()">
+        <option value="">Choose a job type</option>
+        <option value="Babysitting">Babysitting</option>
+        <option value="Pet Sitting">Pet Sitting</option>
+        <option value="Dog Walking">Dog Walking</option>
+        <option value="Plant Watering">Plant Watering</option>
+        <option value="Package Pickup">Package Pickup</option>
+        <option value="Yard Work">Yard Work</option>
+        <option value="Tutoring">Tutoring</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div id="extraQuestions" style="display:flex; flex-direction:column; gap:12px;"></div>
+
+    <div>
+      <div class="field-label">Pay</div>
+      <input type="text" id="jobPay" placeholder="e.g. $20">
+    </div>
+    <div>
+      <div class="field-label">Difficulty</div>
+      <select id="jobIntensity">
+        <option value="">Select difficulty</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+    </div>
+    <div>
+      <div class="field-label">Age Range</div>
+      <input type="text" id="jobAgeRange" placeholder="e.g. 14–17">
+    </div>
+    <div>
+      <div class="field-label">Date / Time Needed</div>
+      <input type="text" id="jobDate" placeholder="e.g. Sat June 15, around 10am">
+    </div>
+    <div>
+      <div class="field-label">Neighborhood (no exact address)</div>
+      <input type="text" id="jobNeighborhood" placeholder="e.g. Maple Grove">
+    </div>
+    <div>
+      <div class="field-label">Extra Notes</div>
+      <textarea id="jobNotes" placeholder="Any restrictions, special instructions, or info helpers should know..."></textarea>
+    </div>
+
+    <button class="btn-primary" onclick="submitJob()">Post Job →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ DETAILS -->
+<div id="detailsScreen" class="screen">
+  <button class="back-btn" id="detailsBackBtn" onclick="showMainPage('jobsScreen')">← Back</button>
+
+  <div class="details-type-badge" id="detailsTypeBadge"></div>
+  <div class="details-title" id="detailsTitle"></div>
+
+  <div class="details-section" id="detailsInfoCard"></div>
+
+  <div class="address-locked">
+    🔒 Address hidden · Unlocks after both sides confirm a match
+  </div>
+
+  <div style="margin-top: 20px; display:flex; flex-direction:column; gap:10px;">
+    <button class="btn-primary" id="requestButton" onclick="requestMatch()" style="display:none;">
+      Send Match Request
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ PROFILE -->
+<div id="profileScreen" class="screen">
+  <div class="profile-header">
+    <div class="profile-avatar" id="profileAvatar">?</div>
+    <div class="profile-name" id="profileName"></div>
+    <div class="profile-role" id="profileRoleLabel"></div>
+  </div>
+
+  <div class="profile-card" id="profileDetails"></div>
+</div>
+
+<!-- ═══════════════════════════════════════ FAMILY -->
+<div id="familyScreen" class="screen">
+  <h1 class="screen-title">Family</h1>
+
+  <div id="listerFamilyTools" style="display:none;">
+    <p class="screen-sub">Add a child to your family account so they can apply to jobs under your supervision.</p>
+
+    <div class="form-group" style="margin-bottom:16px;">
+      <div>
+        <div class="field-label">Child's Name</div>
+        <input type="text" id="childName" placeholder="Name">
+      </div>
+      <div>
+        <div class="field-label">Child's Age</div>
+        <input type="number" id="childAge" placeholder="Age" min="13" max="17">
+      </div>
+      <div>
+        <div class="field-label">Skills</div>
+        <input type="text" id="childSkills" placeholder="e.g. yard work, pet care">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="addChild()" style="margin-bottom:20px;">Add Child Account</button>
+    <div id="childList"></div>
+  </div>
+
+  <div id="helperFamilyTools" style="display:none;">
+    <div class="placeholder-box">
+      <div class="placeholder-icon">👨‍👩‍👧</div>
+      <p>Parent approval, safety settings, and emergency contacts will go here.<br><br>Your parent/guardian will receive notifications when you apply to jobs.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SUPPORT -->
+<div id="supportScreen" class="screen">
+  <h1 class="screen-title">Support</h1>
+  <p class="screen-sub">Safety resources and help</p>
+
+  <div class="placeholder-box" style="margin-bottom:14px;">
+    <div class="placeholder-icon">📖</div>
+    <p><strong>Safety Rules & FAQs</strong><br><br>Review community guidelines and safety tips for helpers and listers.</p>
+  </div>
+  <div class="placeholder-box" style="margin-bottom:14px;">
+    <div class="placeholder-icon">🚨</div>
+    <p><strong>Report a Problem</strong><br><br>If something felt unsafe or wrong, report it here. All reports are reviewed.</p>
+  </div>
+  <div class="placeholder-box">
+    <div class="placeholder-icon">💬</div>
+    <p><strong>Contact Support</strong><br><br>Reach the YardHop team directly.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ BOTTOM NAV -->
+<div id="bottomNav">
+  <div class="nav-items">
+    <button class="nav-btn" id="nav-home" onclick="showMainPage('homeScreen'); setActiveNav('nav-home')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-btn" id="nav-jobs" onclick="showMainPage('jobsScreen'); setActiveNav('nav-jobs')">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Jobs</span>
+    </button>
+    <button class="nav-btn" id="nav-profile" onclick="showMainPage('profileScreen'); setActiveNav('nav-profile')">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profile</span>
+    </button>
+    <button class="nav-btn" id="nav-family" onclick="showMainPage('familyScreen'); setActiveNav('nav-family')">
+      <span class="nav-icon">👨‍👩‍👧</span>
+      <span class="nav-label">Family</span>
+    </button>
+    <button class="nav-btn" id="nav-support" onclick="showMainPage('supportScreen'); setActiveNav('nav-support')">
+      <span class="nav-icon">❓</span>
+      <span class="nav-label">Support</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  let userRole = "";
+  let currentUser = {};
+  let previousScreen = "homeScreen";
+
+  // ── ROLE SELECTION ──
+  function chooseRole(role) {
+    userRole = role;
+    showScreen("signupScreen");
+    if (role === "helper") {
+      document.getElementById("signupTitle").innerText = "Create Helper Account";
+      document.getElementById("signupSub").innerText = "Find safe local jobs in your neighborhood.";
+      document.getElementById("helperSignup").style.display = "block";
+      document.getElementById("listerSignup").style.display = "none";
+    } else {
+      document.getElementById("signupTitle").innerText = "Post Jobs for Local Help";
+      document.getElementById("signupSub").innerText = "Find trusted teen helpers near you.";
+      document.getElementById("listerSignup").style.display = "block";
+      document.getElementById("helperSignup").style.display = "none";
+    }
+  }
+
+  // ── HELPER SIGNUP ──
+  function finishHelperSignup() {
+    let name = document.getElementById("helperName").value.trim();
+    let age = parseInt(document.getElementById("helperAge").value);
+    let neighborhood = document.getElementById("helperNeighborhood").value.trim();
+    let skills = document.getElementById("helperSkills").value.trim();
+    let parentContact = document.getElementById("parentContact").value.trim();
+    let safetyChecked = document.getElementById("helperSafety").checked;
+
+    if (!name) { showToast("Please enter your name."); return; }
+    if (isNaN(age) || age < 13 || age > 17) {
+      showToast("Helpers must be between 13 and 17 years old.");
+      return;
+    }
+    if (!neighborhood) { showToast("Please enter your neighborhood."); return; }
+    if (!skills) { showToast("Please list at least one skill."); return; }
+    if (!parentContact) { showToast("Please provide a parent/guardian contact."); return; }
+    if (!safetyChecked) {
+      showToast("Please confirm your parent/guardian is aware.");
+      return;
     }
 
-    function finishHelperSignup() {
-      let name = document.getElementById("helperName").value;
-      let age = document.getElementById("helperAge").value;
-      let neighborhood = document.getElementById("helperNeighborhood").value;
-      let skills = document.getElementById("helperSkills").value;
-      let parentContact = document.getElementById("parentContact").value;
-      let safetyChecked = document.getElementById("helperSafety").checked;
+    currentUser = { name, age, neighborhood, skills, parentContact, role: "helper" };
+    setupProfile();
+    document.getElementById("homeGreeting").innerText = `Hey, ${name}! 👋`;
+    document.getElementById("homeMessage").innerText = "Browse safe local jobs near you.";
+    document.getElementById("homeRoleBadge").innerText = "Helper";
+    document.getElementById("helperHome").style.display = "flex";
+    document.getElementById("listerHome").style.display = "none";
+    document.getElementById("familyMessage") && (document.getElementById("familyMessage").innerText = "");
+    document.getElementById("helperFamilyTools").style.display = "block";
+    document.getElementById("listerFamilyTools").style.display = "none";
+    enterApp();
+  }
 
-      if (!safetyChecked) {
-        alert("Please confirm parent/guardian awareness before continuing.");
-        return;
-      }
+  // ── LISTER SIGNUP ──
+  function finishListerSignup() {
+    let name = document.getElementById("listerName").value.trim();
+    let age = parseInt(document.getElementById("listerAge").value);
+    let neighborhood = document.getElementById("listerNeighborhood").value.trim();
+    let proof = document.getElementById("listerProof").value.trim();
+    let locationChecked = document.getElementById("listerLocation").checked;
+    let safetyChecked = document.getElementById("listerSafety").checked;
 
-      document.getElementById("profileInfo").innerHTML =
-        `<strong>${name}</strong><br>
-        Role: Helper<br>
-        Age: ${age}<br>
-        Neighborhood: ${neighborhood}<br>
-        Skills: ${skills}<br>
-        Parent/Guardian Contact: ${parentContact}`;
-
-      document.getElementById("homeMessage").innerText = "Browse safe local jobs near you.";
-      document.getElementById("helperHome").style.display = "block";
-      document.getElementById("listerHome").style.display = "none";
-
-      document.getElementById("familyMessage").innerText =
-        "Parent approval, safety settings, and emergency contacts will go here.";
-
-      enterApp();
+    if (!name) { showToast("Please enter your name."); return; }
+    if (!neighborhood) { showToast("Please enter your neighborhood."); return; }
+    if (!locationChecked || !safetyChecked) {
+      showToast("Please agree to both safety terms.");
+      return;
     }
 
-    function finishListerSignup() {
-      let name = document.getElementById("listerName").value;
-      let age = document.getElementById("listerAge").value;
-      let neighborhood = document.getElementById("listerNeighborhood").value;
-      let proof = document.getElementById("listerProof").value;
-      let locationChecked = document.getElementById("listerLocation").checked;
-      let safetyChecked = document.getElementById("listerSafety").checked;
+    currentUser = { name, age, neighborhood, proof, role: "lister" };
+    setupProfile();
+    document.getElementById("homeGreeting").innerText = `Hey, ${name}! 👋`;
+    document.getElementById("homeMessage").innerText = "Post jobs and find trusted local teens.";
+    document.getElementById("homeRoleBadge").innerText = "Lister";
+    document.getElementById("listerHome").style.display = "flex";
+    document.getElementById("helperHome").style.display = "none";
+    document.getElementById("listerFamilyTools").style.display = "block";
+    document.getElementById("helperFamilyTools").style.display = "none";
+    enterApp();
+  }
 
-      if (!locationChecked || !safetyChecked) {
-        alert("Please confirm location verification and safety agreement before continuing.");
-        return;
-      }
+  function setupProfile() {
+    let u = currentUser;
+    document.getElementById("profileAvatar").innerText = u.name.charAt(0).toUpperCase();
+    document.getElementById("profileName").innerText = u.name;
+    document.getElementById("profileRoleLabel").innerText = u.role === "helper" ? "Teen Helper" : "Job Lister";
 
-      document.getElementById("profileInfo").innerHTML =
-        `<strong>${name}</strong><br>
-        Role: Job Lister<br>
-        Age: ${age}<br>
-        Neighborhood: ${neighborhood}<br>
-        Proof of Age: ${proof}`;
-
-      document.getElementById("homeMessage").innerText =
-        "Post local jobs, browse helpers, or view jobs near you.";
-
-      document.getElementById("listerHome").style.display = "block";
-      document.getElementById("helperHome").style.display = "none";
-
-      document.getElementById("familyMessage").innerText =
-        "Add children to your family account and manage family verification.";
-
-      document.getElementById("listerFamilyTools").style.display = "block";
-
-      enterApp();
-    }
-
-    function enterApp() {
-      document.getElementById("signupScreen").style.display = "none";
-      document.getElementById("homeScreen").style.display = "block";
-      document.getElementById("bottomNav").style.display = "block";
-    }
-
-    function showMainPage(pageId) {
-      let pages = [
-        "homeScreen",
-        "jobsScreen",
-        "helpersScreen",
-        "postJobScreen",
-        "detailsScreen",
-        "profileScreen",
-        "familyScreen",
-        "supportScreen"
-      ];
-
-      for (let i = 0; i < pages.length; i++) {
-        document.getElementById(pages[i]).style.display = "none";
-      }
-
-      document.getElementById(pageId).style.display = "block";
-    }
-
-    function updateJobQuestions() {
-      let jobType = document.getElementById("jobType").value;
-      let extra = document.getElementById("extraQuestions");
-
-      if (jobType === "Babysitting") {
-        extra.innerHTML = `
-          <input id="extraOne" placeholder="Number of children">
-          <input id="extraTwo" placeholder="Ages of children">
-        `;
-      } else if (jobType === "Pet Sitting" || jobType === "Dog Walking") {
-        extra.innerHTML = `
-          <input id="extraOne" placeholder="Number/type of pets">
-          <input id="extraTwo" placeholder="Pet restrictions or allergies">
-        `;
-      } else if (jobType === "Plant Watering") {
-        extra.innerHTML = `
-          <input id="extraOne" placeholder="Indoor or outdoor plants">
-          <input id="extraTwo" placeholder="How many days?">
-        `;
-      } else {
-        extra.innerHTML = `
-          <input id="extraOne" placeholder="Extra detail 1">
-          <input id="extraTwo" placeholder="Extra detail 2">
-        `;
-      }
-    }
-
-    function submitJob() {
-      if (userRole !== "lister") {
-        alert("Only job listers can post jobs.");
-        return;
-      }
-
-      let type = document.getElementById("jobType").value;
-      let pay = document.getElementById("jobPay").value;
-      let intensity = document.getElementById("jobIntensity").value;
-      let ageRange = document.getElementById("jobAgeRange").value;
-      let date = document.getElementById("jobDate").value;
-      let neighborhood = document.getElementById("jobNeighborhood").value;
-      let notes = document.getElementById("jobNotes").value;
-
-      let extraOne = document.getElementById("extraOne") ? document.getElementById("extraOne").value : "";
-      let extraTwo = document.getElementById("extraTwo") ? document.getElementById("extraTwo").value : "";
-
-      let summary = `${pay} · ${intensity} · Ages ${ageRange} · ${neighborhood}`;
-
-      let details =
-        `Job type: ${type}. Pay: ${pay}. Intensity: ${intensity}. Preferred age range: ${ageRange}. Date/time: ${date}. Neighborhood: ${neighborhood}. Extra info: ${extraOne}, ${extraTwo}. Notes: ${notes}. Exact address unlocks only after both sides confirm.`;
-
-      let newJob = document.createElement("div");
-      newJob.innerHTML = `
-        <h3>${type}</h3>
-        <p>${summary}</p>
+    let rows = "";
+    if (u.role === "helper") {
+      rows = `
+        <div class="profile-row"><span class="profile-row-icon">🎂</span><span class="profile-row-label">Age</span><span class="profile-row-value">${u.age}</span></div>
+        <div class="profile-row"><span class="profile-row-icon">📍</span><span class="profile-row-label">Neighborhood</span><span class="profile-row-value">${u.neighborhood}</span></div>
+        <div class="profile-row"><span class="profile-row-icon">⚡</span><span class="profile-row-label">Skills</span><span class="profile-row-value">${u.skills}</span></div>
+        <div class="profile-row"><span class="profile-row-icon">👨‍👩‍👧</span><span class="profile-row-label">Parent Contact</span><span class="profile-row-value">${u.parentContact}</span></div>
+        <div class="profile-row"><span class="profile-row-icon">⭐</span><span class="profile-row-label">Rating</span><span class="profile-row-value">New helper</span></div>
       `;
-
-      newJob.onclick = function() {
-        openJobDetails(type, details);
-      };
-
-      document.getElementById("jobsList").appendChild(newJob);
-
-      alert("Job posted to Jobs Near You!");
-      showMainPage("jobsScreen");
-    }
-
-    function openJobDetails(title, text) {
-      document.getElementById("detailsTitle").innerText = title;
-      document.getElementById("detailsText").innerText = text;
-
-      if (userRole === "helper") {
-        document.getElementById("requestButton").style.display = "inline-block";
-      } else {
-        document.getElementById("requestButton").style.display = "none";
-      }
-
-      showMainPage("detailsScreen");
-    }
-
-    function openHelperDetails(title, text) {
-      document.getElementById("detailsTitle").innerText = title;
-      document.getElementById("detailsText").innerText = text;
-      document.getElementById("requestButton").style.display = "inline-block";
-      showMainPage("detailsScreen");
-    }
-
-    function requestMatch() {
-      alert("Request sent! Personal information unlocks only after both sides confirm.");
-    }
-
-    function addChild() {
-      let name = document.getElementById("childName").value;
-      let age = document.getElementById("childAge").value;
-      let skills = document.getElementById("childSkills").value;
-
-      let child = document.createElement("div");
-      child.innerHTML = `
-        <h4>${name}</h4>
-        <p>Age: ${age}</p>
-        <p>Skills: ${skills}</p>
-        <p>Connected to family account.</p>
+    } else {
+      rows = `
+        <div class="profile-row"><span class="profile-row-icon">📍</span><span class="profile-row-label">Neighborhood</span><span class="profile-row-value">${u.neighborhood}</span></div>
+        <div class="profile-row"><span class="profile-row-icon">🪪</span><span class="profile-row-label">ID Verified</span><span class="profile-row-value">${u.proof || "Pending"}</span></div>
+        <div class="profile-row"><span class="profile-row-icon">✅</span><span class="profile-row-label">Safety Agreement</span><span class="profile-row-value">Signed</span></div>
       `;
-
-      document.getElementById("childList").appendChild(child);
     }
-  </script>
+    document.getElementById("profileDetails").innerHTML = rows;
+  }
+
+  function enterApp() {
+    showScreen("homeScreen");
+    document.getElementById("bottomNav").style.display = "block";
+    setActiveNav("nav-home");
+  }
+
+  // ── SCREEN MANAGEMENT ──
+  function showScreen(screenId) {
+    let screens = [
+      "welcomeScreen","signupScreen","homeScreen","jobsScreen",
+      "helpersScreen","postJobScreen","detailsScreen",
+      "profileScreen","familyScreen","supportScreen"
+    ];
+    screens.forEach(id => {
+      let el = document.getElementById(id);
+      el.classList.remove("active");
+      el.style.display = "";
+    });
+    document.getElementById(screenId).classList.add("active");
+  }
+
+  function showMainPage(pageId) {
+    previousScreen = pageId;
+    showScreen(pageId);
+    // Update jobs screen title based on role
+    if (pageId === "jobsScreen") {
+      document.getElementById("jobsScreenTitle").innerText =
+        userRole === "lister" ? "My Posted Jobs" : "Jobs Near You";
+    }
+  }
+
+  function goBack(screenId) {
+    showScreen(screenId);
+  }
+
+  function setActiveNav(id) {
+    document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  // ── JOB QUESTIONS ──
+  function updateJobQuestions() {
+    let jobType = document.getElementById("jobType").value;
+    let extra = document.getElementById("extraQuestions");
+    extra.innerHTML = "";
+    if (!jobType) return;
+
+    let fields = [];
+    if (jobType === "Babysitting") {
+      fields = ["Number of children", "Ages of children"];
+    } else if (jobType === "Pet Sitting" || jobType === "Dog Walking") {
+      fields = ["Number and type of pets", "Any pet allergies or restrictions"];
+    } else if (jobType === "Plant Watering") {
+      fields = ["Indoor or outdoor plants?", "How many days?"];
+    } else if (jobType === "Tutoring") {
+      fields = ["Subject(s) needed", "Grade level"];
+    } else {
+      fields = ["Extra detail 1", "Extra detail 2"];
+    }
+
+    fields.forEach((placeholder, i) => {
+      extra.innerHTML += `
+        <div>
+          <div class="field-label">${placeholder}</div>
+          <input type="text" id="extra${i}" placeholder="${placeholder}">
+        </div>`;
+    });
+  }
+
+  // ── SUBMIT JOB ──
+  function submitJob() {
+    if (userRole !== "lister") { showToast("Only listers can post jobs."); return; }
+
+    let type = document.getElementById("jobType").value;
+    let pay = document.getElementById("jobPay").value.trim();
+    let intensity = document.getElementById("jobIntensity").value;
+    let ageRange = document.getElementById("jobAgeRange").value.trim();
+    let date = document.getElementById("jobDate").value.trim();
+    let neighborhood = document.getElementById("jobNeighborhood").value.trim();
+    let notes = document.getElementById("jobNotes").value.trim();
+
+    if (!type) { showToast("Please choose a job type."); return; }
+    if (!pay) { showToast("Please enter a pay amount."); return; }
+    if (!neighborhood) { showToast("Please enter a neighborhood."); return; }
+
+    let extra0 = document.getElementById("extra0") ? document.getElementById("extra0").value : "";
+    let extra1 = document.getElementById("extra1") ? document.getElementById("extra1").value : "";
+    let emoji = { "Babysitting":"👶","Pet Sitting":"🐱","Dog Walking":"🐕","Plant Watering":"🌱","Package Pickup":"📦","Yard Work":"🍂","Tutoring":"📚","Other":"🔧" };
+
+    let newCard = document.createElement("div");
+    newCard.className = "job-card";
+    newCard.innerHTML = `
+      <div class="job-card-top">
+        <div class="job-title">${emoji[type] || "🔧"} ${type}</div>
+        <div class="pay-badge">${pay}</div>
+      </div>
+      <div class="job-tags">
+        ${intensity ? `<span class="tag">${intensity}</span>` : ""}
+        ${ageRange ? `<span class="tag">Ages ${ageRange}</span>` : ""}
+        <span class="tag">📍 ${neighborhood}</span>
+      </div>
+    `;
+    newCard.onclick = function() {
+      openJobDetails(type, pay, intensity, ageRange, neighborhood, `${notes} ${extra0} ${extra1}`.trim());
+    };
+
+    document.getElementById("jobsList").appendChild(newCard);
+    showToast("✅ Job posted!");
+    showMainPage("jobsScreen");
+  }
+
+  // ── OPEN JOB DETAILS ──
+  function openJobDetails(title, pay, intensity, ageRange, neighborhood, notes) {
+    document.getElementById("detailsTypeBadge").innerText = "Job";
+    document.getElementById("detailsTitle").innerText = title;
+    document.getElementById("detailsBackBtn").onclick = () => showMainPage("jobsScreen");
+
+    document.getElementById("detailsInfoCard").innerHTML = `
+      <div class="details-row"><span class="details-row-icon">💵</span><span class="details-row-label">Pay</span><span class="details-row-value">${pay}</span></div>
+      <div class="details-row"><span class="details-row-icon">⚡</span><span class="details-row-label">Difficulty</span><span class="details-row-value">${intensity || "Not listed"}</span></div>
+      <div class="details-row"><span class="details-row-icon">🎂</span><span class="details-row-label">Age Range</span><span class="details-row-value">${ageRange || "Open"}</span></div>
+      <div class="details-row"><span class="details-row-icon">📍</span><span class="details-row-label">Area</span><span class="details-row-value">${neighborhood}</span></div>
+      ${notes ? `<div class="details-row"><span class="details-row-icon">📝</span><span class="details-row-label">Notes</span><span class="details-row-value" style="max-width:55%; text-align:right;">${notes}</span></div>` : ""}
+    `;
+
+    let btn = document.getElementById("requestButton");
+    btn.style.display = userRole === "helper" ? "block" : "none";
+    showScreen("detailsScreen");
+  }
+
+  // ── OPEN HELPER DETAILS ──
+  function openHelperDetails(name, age, neighborhood, skills, rating) {
+    // Only listers should be able to request helpers
+    document.getElementById("detailsTypeBadge").innerText = "Helper";
+    document.getElementById("detailsTitle").innerText = name;
+    document.getElementById("detailsBackBtn").onclick = () => showMainPage("helpersScreen");
+
+    document.getElementById("detailsInfoCard").innerHTML = `
+      <div class="details-row"><span class="details-row-icon">🎂</span><span class="details-row-label">Age</span><span class="details-row-value">${age}</span></div>
+      <div class="details-row"><span class="details-row-icon">📍</span><span class="details-row-label">Area</span><span class="details-row-value">${neighborhood}</span></div>
+      <div class="details-row"><span class="details-row-icon">⚡</span><span class="details-row-label">Skills</span><span class="details-row-value">${skills}</span></div>
+      <div class="details-row"><span class="details-row-icon">⭐</span><span class="details-row-label">Rating</span><span class="details-row-value">${rating} / 5</span></div>
+      <div class="details-row"><span class="details-row-icon">✅</span><span class="details-row-label">Verified</span><span class="details-row-value">Family verified</span></div>
+    `;
+
+    let btn = document.getElementById("requestButton");
+    // Only listers can request helpers; helpers can't request each other
+    btn.style.display = userRole === "lister" ? "block" : "none";
+    btn.innerText = "Request This Helper";
+    showScreen("detailsScreen");
+  }
+
+  function requestMatch() {
+    showToast("✅ Request sent! Info unlocks after both confirm.");
+  }
+
+  // ── ADD CHILD ──
+  function addChild() {
+    let name = document.getElementById("childName").value.trim();
+    let age = parseInt(document.getElementById("childAge").value);
+    let skills = document.getElementById("childSkills").value.trim();
+
+    if (!name) { showToast("Please enter a name."); return; }
+    if (isNaN(age) || age < 13 || age > 17) {
+      showToast("Child must be between 13 and 17.");
+      return;
+    }
+
+    let card = document.createElement("div");
+    card.className = "child-card";
+    card.innerHTML = `
+      <h4>${name.charAt(0).toUpperCase() + name.slice(1)}</h4>
+      <p>Age ${age} · ${skills || "No skills listed"}</p>
+      <p style="margin-top:4px; font-size:12px; color:var(--green); font-weight:700;">✅ Connected to family account</p>
+    `;
+    document.getElementById("childList").appendChild(card);
+
+    document.getElementById("childName").value = "";
+    document.getElementById("childAge").value = "";
+    document.getElementById("childSkills").value = "";
+    showToast("Child account added!");
+  }
+
+  // ── TOAST ──
+  function showToast(msg) {
+    let t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2800);
+  }
+</script>
 </body>
 </html>
