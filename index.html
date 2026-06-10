@@ -1,14 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>YardHop</title>
+  <title>YardHop</title>
 </head>
 <body>
-    <h1>Welcome to YardHop</h1>
-    <p>Find local jobs in your neighborhood.</p>
+  <h1>YardHop</h1>
+  <p>Find small jobs near you.</p>
 
-    <button onclick="alert('Coming Soon!')">
-        Browse Jobs
-    </button>
+  <h2>Create a Profile</h2>
+  <input id="name" placeholder="Your first name">
+  <input id="skills" placeholder="Skills: dog walking, mowing, tutoring">
+  <button onclick="createProfile()">Save Profile</button>
+
+  <p id="profileOutput"></p>
+
+  <h2>Post a Job</h2>
+  <input id="jobTitle" placeholder="Job title">
+  <input id="jobPay" placeholder="Pay, like $20">
+  <input id="jobLocation" placeholder="Neighborhood">
+  <button onclick="postJob()">Post Job</button>
+
+  <h2>Available Jobs</h2>
+  <ul id="jobList"></ul>
+
+  <script>
+    function createProfile() {
+      let name = document.getElementById("name").value;
+      let skills = document.getElementById("skills").value;
+
+      document.getElementById("profileOutput").innerText =
+        name + "'s skills: " + skills;
+    }
+
+    function postJob() {
+      let title = document.getElementById("jobTitle").value;
+      let pay = document.getElementById("jobPay").value;
+      let location = document.getElementById("jobLocation").value;
+
+      let listItem = document.createElement("li");
+      listItem.innerText = title + " - " + pay + " - " + location;
+
+      document.getElementById("jobList").appendChild(listItem);
+    }
+  </script>
 </body>
 </html>
