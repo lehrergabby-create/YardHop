@@ -8,16 +8,25 @@
   <h1>YardHop</h1>
   <p>Safe local help for families and teen helpers.</p>
 
+  <button onclick="showPage('home')">Home</button>
+  <button onclick="showPage('profile')">Profile</button>
+  <button onclick="showPage('jobs')">Find Jobs</button>
+  <button onclick="showPage('helpers')">Find Helpers</button>
+  <button onclick="showPage('family')">Family</button>
+  <button onclick="showPage('support')">Support</button>
+
   <hr>
 
-  <h2>Choose Your Role</h2>
-  <button onclick="showLister()">I need help with a job</button>
-  <button onclick="showHelper()">I want to be a helper</button>
+  <div id="home">
+    <h2>Welcome</h2>
+    <p>Choose how you want to use YardHop.</p>
 
-  <hr>
+    <button onclick="showPage('lister')">I need help with a job</button>
+    <button onclick="showPage('helper')">I want to be a helper</button>
+  </div>
 
-  <div id="listerSection" style="display:none;">
-    <h2>Job Lister Profile</h2>
+  <div id="lister" style="display:none;">
+    <h2>Job Lister Setup</h2>
 
     <input id="listerName" placeholder="Your name">
     <input id="listerNeighborhood" placeholder="Neighborhood">
@@ -33,12 +42,12 @@
     <button onclick="postJob()">Post Job</button>
   </div>
 
-  <div id="helperSection" style="display:none;">
-    <h2>Helper Profile</h2>
+  <div id="helper" style="display:none;">
+    <h2>Helper Setup</h2>
 
     <input id="helperName" placeholder="Your name">
     <input id="helperAge" placeholder="Age">
-    <input id="helperSkills" placeholder="Skills: dog walking, babysitting, tutoring">
+    <input id="helperSkills" placeholder="Skills">
     <input id="helperNeighborhood" placeholder="Neighborhood">
 
     <button onclick="saveHelper()">Save Helper Profile</button>
@@ -46,57 +55,74 @@
     <p id="helperOutput"></p>
   </div>
 
-  <hr>
+  <div id="profile" style="display:none;">
+    <h2>Profile</h2>
+    <p>Your profile information will appear here.</p>
+    <p id="savedProfile"></p>
+  </div>
 
-  <h2>Find Jobs</h2>
-  <div id="jobList">
-    <div>
-      <h3>Water Plants</h3>
-      <p>Pay: $15</p>
-      <p>Intensity: Easy</p>
-      <p>Age range: 13-17</p>
+  <div id="jobs" style="display:none;">
+    <h2>Find Jobs</h2>
+
+    <div id="jobList">
+      <div>
+        <h3>Water Plants</h3>
+        <p>Pay: $15</p>
+        <p>Intensity: Easy</p>
+        <p>Age range: 13-17</p>
+        <button onclick="alert('Request sent!')">Request Job</button>
+      </div>
+
+      <div>
+        <h3>Dog Walking</h3>
+        <p>Pay: $20</p>
+        <p>Intensity: Medium</p>
+        <p>Age range: 14-17</p>
+        <button onclick="alert('Request sent!')">Request Job</button>
+      </div>
     </div>
+  </div>
 
-    <div>
-      <h3>Dog Walking</h3>
-      <p>Pay: $20</p>
-      <p>Intensity: Medium</p>
-      <p>Age range: 14-17</p>
+  <div id="helpers" style="display:none;">
+    <h2>Find Helpers</h2>
+
+    <div id="helperList">
+      <div>
+        <h3>Ava</h3>
+        <p>Skills: Babysitting, tutoring, pet care</p>
+        <p>Rating: ★★★★★</p>
+        <button onclick="alert('Helper request sent!')">Request Helper</button>
+      </div>
+
+      <div>
+        <h3>Leo</h3>
+        <p>Skills: Yard work, dog walking, carrying packages</p>
+        <p>Rating: ★★★★☆</p>
+        <button onclick="alert('Helper request sent!')">Request Helper</button>
+      </div>
     </div>
   </div>
 
-  <hr>
-
-  <h2>Find Helpers</h2>
-  <div>
-    <h3>Ava</h3>
-    <p>Skills: Babysitting, tutoring, pet care</p>
-    <p>Rating: ★★★★★</p>
+  <div id="family" style="display:none;">
+    <h2>Family</h2>
+    <p>This page will be used for parent approval, family verification, and connected helper accounts.</p>
   </div>
 
-  <div>
-    <h3>Leo</h3>
-    <p>Skills: Yard work, dog walking, carrying packages</p>
-    <p>Rating: ★★★★☆</p>
+  <div id="support" style="display:none;">
+    <h2>Support</h2>
+    <p>Need help? Contact YardHop support here.</p>
+    <p>Future features: FAQs, safety rules, reviews, report a problem, and contact form.</p>
   </div>
-
-  <hr>
-
-  <h2>Bottom Navigation</h2>
-  <button>Home</button>
-  <button>Profile</button>
-  <button>Family</button>
-  <button>Support</button>
 
   <script>
-    function showLister() {
-      document.getElementById("listerSection").style.display = "block";
-      document.getElementById("helperSection").style.display = "none";
-    }
+    function showPage(pageId) {
+      let pages = ["home", "lister", "helper", "profile", "jobs", "helpers", "family", "support"];
 
-    function showHelper() {
-      document.getElementById("helperSection").style.display = "block";
-      document.getElementById("listerSection").style.display = "none";
+      for (let i = 0; i < pages.length; i++) {
+        document.getElementById(pages[i]).style.display = "none";
+      }
+
+      document.getElementById(pageId).style.display = "block";
     }
 
     function postJob() {
@@ -112,9 +138,13 @@
         <p>Pay: ${pay}</p>
         <p>Intensity: ${intensity}</p>
         <p>Age range: ${age}</p>
+        <button onclick="alert('Request sent!')">Request Job</button>
       `;
 
       document.getElementById("jobList").appendChild(newJob);
+
+      alert("Job posted!");
+      showPage("jobs");
     }
 
     function saveHelper() {
@@ -123,8 +153,17 @@
       let skills = document.getElementById("helperSkills").value;
       let neighborhood = document.getElementById("helperNeighborhood").value;
 
-      document.getElementById("helperOutput").innerHTML =
-        `<strong>${name}</strong>, age ${age}<br>Skills: ${skills}<br>Neighborhood: ${neighborhood}`;
+      let profileText =
+        `<strong>${name}</strong><br>
+        Age: ${age}<br>
+        Skills: ${skills}<br>
+        Neighborhood: ${neighborhood}`;
+
+      document.getElementById("helperOutput").innerHTML = profileText;
+      document.getElementById("savedProfile").innerHTML = profileText;
+
+      alert("Helper profile saved!");
+      showPage("profile");
     }
   </script>
 </body>
