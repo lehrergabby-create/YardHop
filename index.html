@@ -3,44 +3,128 @@
 <head>
   <title>YardHop</title>
 </head>
+
 <body>
   <h1>YardHop</h1>
-  <p>Find small jobs near you.</p>
+  <p>Safe local help for families and teen helpers.</p>
 
-  <h2>Create a Profile</h2>
-  <input id="name" placeholder="Your first name">
-  <input id="skills" placeholder="Skills: dog walking, mowing, tutoring">
-  <button onclick="createProfile()">Save Profile</button>
+  <hr>
 
-  <p id="profileOutput"></p>
+  <h2>Choose Your Role</h2>
+  <button onclick="showLister()">I need help with a job</button>
+  <button onclick="showHelper()">I want to be a helper</button>
 
-  <h2>Post a Job</h2>
-  <input id="jobTitle" placeholder="Job title">
-  <input id="jobPay" placeholder="Pay, like $20">
-  <input id="jobLocation" placeholder="Neighborhood">
-  <button onclick="postJob()">Post Job</button>
+  <hr>
 
-  <h2>Available Jobs</h2>
-  <ul id="jobList"></ul>
+  <div id="listerSection" style="display:none;">
+    <h2>Job Lister Profile</h2>
+
+    <input id="listerName" placeholder="Your name">
+    <input id="listerNeighborhood" placeholder="Neighborhood">
+    <input id="pets" placeholder="Number of pets">
+    <input id="children" placeholder="Number of children">
+
+    <h3>Post a Job</h3>
+    <input id="jobTitle" placeholder="Job title">
+    <input id="jobPay" placeholder="Pay, like $20">
+    <input id="jobIntensity" placeholder="Intensity: easy, medium, hard">
+    <input id="jobAge" placeholder="Age range, like 14-17">
+
+    <button onclick="postJob()">Post Job</button>
+  </div>
+
+  <div id="helperSection" style="display:none;">
+    <h2>Helper Profile</h2>
+
+    <input id="helperName" placeholder="Your name">
+    <input id="helperAge" placeholder="Age">
+    <input id="helperSkills" placeholder="Skills: dog walking, babysitting, tutoring">
+    <input id="helperNeighborhood" placeholder="Neighborhood">
+
+    <button onclick="saveHelper()">Save Helper Profile</button>
+
+    <p id="helperOutput"></p>
+  </div>
+
+  <hr>
+
+  <h2>Find Jobs</h2>
+  <div id="jobList">
+    <div>
+      <h3>Water Plants</h3>
+      <p>Pay: $15</p>
+      <p>Intensity: Easy</p>
+      <p>Age range: 13-17</p>
+    </div>
+
+    <div>
+      <h3>Dog Walking</h3>
+      <p>Pay: $20</p>
+      <p>Intensity: Medium</p>
+      <p>Age range: 14-17</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Find Helpers</h2>
+  <div>
+    <h3>Ava</h3>
+    <p>Skills: Babysitting, tutoring, pet care</p>
+    <p>Rating: ★★★★★</p>
+  </div>
+
+  <div>
+    <h3>Leo</h3>
+    <p>Skills: Yard work, dog walking, carrying packages</p>
+    <p>Rating: ★★★★☆</p>
+  </div>
+
+  <hr>
+
+  <h2>Bottom Navigation</h2>
+  <button>Home</button>
+  <button>Profile</button>
+  <button>Family</button>
+  <button>Support</button>
 
   <script>
-    function createProfile() {
-      let name = document.getElementById("name").value;
-      let skills = document.getElementById("skills").value;
+    function showLister() {
+      document.getElementById("listerSection").style.display = "block";
+      document.getElementById("helperSection").style.display = "none";
+    }
 
-      document.getElementById("profileOutput").innerText =
-        name + "'s skills: " + skills;
+    function showHelper() {
+      document.getElementById("helperSection").style.display = "block";
+      document.getElementById("listerSection").style.display = "none";
     }
 
     function postJob() {
       let title = document.getElementById("jobTitle").value;
       let pay = document.getElementById("jobPay").value;
-      let location = document.getElementById("jobLocation").value;
+      let intensity = document.getElementById("jobIntensity").value;
+      let age = document.getElementById("jobAge").value;
 
-      let listItem = document.createElement("li");
-      listItem.innerText = title + " - " + pay + " - " + location;
+      let newJob = document.createElement("div");
 
-      document.getElementById("jobList").appendChild(listItem);
+      newJob.innerHTML = `
+        <h3>${title}</h3>
+        <p>Pay: ${pay}</p>
+        <p>Intensity: ${intensity}</p>
+        <p>Age range: ${age}</p>
+      `;
+
+      document.getElementById("jobList").appendChild(newJob);
+    }
+
+    function saveHelper() {
+      let name = document.getElementById("helperName").value;
+      let age = document.getElementById("helperAge").value;
+      let skills = document.getElementById("helperSkills").value;
+      let neighborhood = document.getElementById("helperNeighborhood").value;
+
+      document.getElementById("helperOutput").innerHTML =
+        `<strong>${name}</strong>, age ${age}<br>Skills: ${skills}<br>Neighborhood: ${neighborhood}`;
     }
   </script>
 </body>
