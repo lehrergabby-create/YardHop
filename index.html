@@ -8,14 +8,14 @@
   <h1>YardHop</h1>
   <p>Safe local help for families and teen helpers.</p>
 
+  <!-- WELCOME -->
   <div id="welcomeScreen">
     <h2>Welcome</h2>
-    <p>Choose how you want to use YardHop.</p>
-
     <button onclick="chooseRole('lister')">I Need Help</button>
     <button onclick="chooseRole('helper')">I Want To Help</button>
   </div>
 
+  <!-- SIGNUP -->
   <div id="signupScreen" style="display:none;">
     <h2 id="signupTitle">Create Account</h2>
 
@@ -35,85 +35,142 @@
     </div>
 
     <div id="listerSignup" style="display:none;">
-      <input id="listerName" placeholder="Your name">
+      <input id="listerName" placeholder="Full name">
+      <input id="listerAge" placeholder="Age">
       <input id="listerNeighborhood" placeholder="Neighborhood">
-      <input id="pets" placeholder="Number of pets">
-      <input id="children" placeholder="Number of children">
+      <input id="listerProof" placeholder="Proof of age / ID placeholder">
+
+      <p>
+        <input type="checkbox" id="listerLocation">
+        I agree to location verification while using the app.
+      </p>
 
       <p>
         <input type="checkbox" id="listerSafety">
-        I agree not to share an exact address until a match is confirmed.
+        I agree not to share exact addresses until a match is confirmed.
       </p>
 
       <button onclick="finishListerSignup()">Create Lister Account</button>
     </div>
   </div>
 
+  <!-- HOME -->
   <div id="homeScreen" style="display:none;">
     <h2>Home</h2>
     <p id="homeMessage"></p>
 
-    <div id="helperHome" style="display:none;">
-      <h3>Find Jobs</h3>
-
-      <div onclick="openDetails('Water Plants', 'Easy job. Water plants while the family is away. Pay: $15. Age range: 13-17.')">
-        <h4>Water Plants</h4>
-        <p>$15 · Easy · Ages 13-17</p>
-      </div>
-
-      <div onclick="openDetails('Dog Walking', 'Walk one friendly dog around the neighborhood. Pay: $20. Intensity: Medium. Age range: 14-17.')">
-        <h4>Dog Walking</h4>
-        <p>$20 · Medium · Ages 14-17</p>
-      </div>
+    <div id="listerHome" style="display:none;">
+      <button onclick="showMainPage('helpersScreen')">Helpers</button>
+      <button onclick="showMainPage('jobsScreen')">Jobs Near You</button>
+      <button onclick="showMainPage('postJobScreen')">+ Post a Job</button>
     </div>
 
-    <div id="listerHome" style="display:none;">
-      <h3>Find Helpers</h3>
+    <div id="helperHome" style="display:none;">
+      <button onclick="showMainPage('jobsScreen')">Jobs Near You</button>
+    </div>
+  </div>
 
-      <div onclick="openDetails('Ava', 'Skills: Babysitting, tutoring, pet care. Rating: 5 stars. Neighborhood verified.')">
-        <h4>Ava</h4>
-        <p>Babysitting · Tutoring · Pet Care</p>
+  <!-- JOBS NEAR YOU -->
+  <div id="jobsScreen" style="display:none;">
+    <h2>Jobs Near You</h2>
+    <p>Exact addresses unlock only after both sides confirm a match.</p>
+
+    <div id="jobsList">
+      <div onclick="openJobDetails('Water Plants', 'Easy plant watering job while a family is away. Pay: $15. Age range: 13-17.')">
+        <h3>Water Plants</h3>
+        <p>$15 · Easy · Ages 13-17 · Nearby neighborhood</p>
       </div>
 
-      <div onclick="openDetails('Leo', 'Skills: Yard work, dog walking, carrying packages. Rating: 4 stars. Neighborhood verified.')">
-        <h4>Leo</h4>
-        <p>Yard Work · Dog Walking · Packages</p>
+      <div onclick="openJobDetails('Dog Walking', 'Walk one friendly dog around the neighborhood. Pay: $20. Intensity: Medium. Age range: 14-17.')">
+        <h3>Dog Walking</h3>
+        <p>$20 · Medium · Ages 14-17 · Nearby neighborhood</p>
       </div>
     </div>
   </div>
 
+  <!-- HELPERS -->
+  <div id="helpersScreen" style="display:none;">
+    <h2>Helpers</h2>
+    <p>Browse verified teen helpers nearby.</p>
+
+    <div onclick="openHelperDetails('Ava', 'Skills: Babysitting, tutoring, pet care. Rating: 5 stars. Family verified.')">
+      <h3>Ava</h3>
+      <p>Babysitting · Tutoring · Pet Care</p>
+    </div>
+
+    <div onclick="openHelperDetails('Leo', 'Skills: Yard work, dog walking, carrying packages. Rating: 4 stars. Family verified.')">
+      <h3>Leo</h3>
+      <p>Yard Work · Dog Walking · Packages</p>
+    </div>
+  </div>
+
+  <!-- POST JOB -->
+  <div id="postJobScreen" style="display:none;">
+    <h2>Post a Job</h2>
+
+    <select id="jobType" onchange="updateJobQuestions()">
+      <option value="">Choose job type</option>
+      <option value="Babysitting">Babysitting</option>
+      <option value="Pet Sitting">Pet Sitting</option>
+      <option value="Dog Walking">Dog Walking</option>
+      <option value="Plant Watering">Plant Watering</option>
+      <option value="Package Pickup">Package Pickup</option>
+      <option value="Yard Work">Yard Work</option>
+      <option value="Tutoring">Tutoring</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <input id="jobPay" placeholder="Pay, like $20">
+    <input id="jobIntensity" placeholder="Intensity: easy, medium, hard">
+    <input id="jobAgeRange" placeholder="Preferred age range, like 14-17">
+    <input id="jobDate" placeholder="Date/time needed">
+    <input id="jobNeighborhood" placeholder="Neighborhood only, no exact address">
+
+    <div id="extraQuestions"></div>
+
+    <textarea id="jobNotes" placeholder="Extra notes or restrictions"></textarea>
+
+    <button onclick="submitJob()">Submit Job</button>
+  </div>
+
+  <!-- DETAILS -->
   <div id="detailsScreen" style="display:none;">
     <h2 id="detailsTitle"></h2>
     <p id="detailsText"></p>
 
-    <button onclick="alert('Request sent! More personal information would unlock only after both sides accept.')">
-      Request Match
-    </button>
-
+    <button id="requestButton" onclick="requestMatch()">Request Match</button>
     <button onclick="showMainPage('homeScreen')">Back Home</button>
   </div>
 
+  <!-- PROFILE -->
   <div id="profileScreen" style="display:none;">
     <h2>Profile</h2>
     <p id="profileInfo"></p>
   </div>
 
+  <!-- FAMILY -->
   <div id="familyScreen" style="display:none;">
     <h2>Family</h2>
-    <p>Family safety and verification will go here.</p>
-    <ul>
-      <li>Parent/guardian approval</li>
-      <li>Connected helper accounts</li>
-      <li>Emergency contact</li>
-      <li>Safety settings</li>
-    </ul>
+    <p id="familyMessage"></p>
+
+    <div id="listerFamilyTools" style="display:none;">
+      <h3>Add Child Helper Account</h3>
+      <input id="childName" placeholder="Child name">
+      <input id="childAge" placeholder="Child age">
+      <input id="childSkills" placeholder="Child skills">
+      <button onclick="addChild()">Add Child</button>
+
+      <div id="childList"></div>
+    </div>
   </div>
 
+  <!-- SUPPORT -->
   <div id="supportScreen" style="display:none;">
     <h2>Support</h2>
-    <p>Need help? This page will include FAQs, safety rules, reviews, and reporting tools.</p>
+    <p>FAQs, safety rules, reviews, report a problem, and contact support will go here.</p>
   </div>
 
+  <!-- BOTTOM NAV -->
   <div id="bottomNav" style="display:none;">
     <hr>
     <button onclick="showMainPage('homeScreen')">Home</button>
@@ -127,7 +184,6 @@
 
     function chooseRole(role) {
       userRole = role;
-
       document.getElementById("welcomeScreen").style.display = "none";
       document.getElementById("signupScreen").style.display = "block";
 
@@ -167,31 +223,42 @@
       document.getElementById("helperHome").style.display = "block";
       document.getElementById("listerHome").style.display = "none";
 
+      document.getElementById("familyMessage").innerText =
+        "Parent approval, safety settings, and emergency contacts will go here.";
+
       enterApp();
     }
 
     function finishListerSignup() {
       let name = document.getElementById("listerName").value;
+      let age = document.getElementById("listerAge").value;
       let neighborhood = document.getElementById("listerNeighborhood").value;
-      let pets = document.getElementById("pets").value;
-      let children = document.getElementById("children").value;
+      let proof = document.getElementById("listerProof").value;
+      let locationChecked = document.getElementById("listerLocation").checked;
       let safetyChecked = document.getElementById("listerSafety").checked;
 
-      if (!safetyChecked) {
-        alert("Please confirm the safety agreement before continuing.");
+      if (!locationChecked || !safetyChecked) {
+        alert("Please confirm location verification and safety agreement before continuing.");
         return;
       }
 
       document.getElementById("profileInfo").innerHTML =
         `<strong>${name}</strong><br>
         Role: Job Lister<br>
+        Age: ${age}<br>
         Neighborhood: ${neighborhood}<br>
-        Pets: ${pets}<br>
-        Children: ${children}`;
+        Proof of Age: ${proof}`;
 
-      document.getElementById("homeMessage").innerText = "Browse trusted helpers in your neighborhood.";
+      document.getElementById("homeMessage").innerText =
+        "Post local jobs, browse helpers, or view jobs near you.";
+
       document.getElementById("listerHome").style.display = "block";
       document.getElementById("helperHome").style.display = "none";
+
+      document.getElementById("familyMessage").innerText =
+        "Add children to your family account and manage family verification.";
+
+      document.getElementById("listerFamilyTools").style.display = "block";
 
       enterApp();
     }
@@ -203,7 +270,16 @@
     }
 
     function showMainPage(pageId) {
-      let pages = ["homeScreen", "detailsScreen", "profileScreen", "familyScreen", "supportScreen"];
+      let pages = [
+        "homeScreen",
+        "jobsScreen",
+        "helpersScreen",
+        "postJobScreen",
+        "detailsScreen",
+        "profileScreen",
+        "familyScreen",
+        "supportScreen"
+      ];
 
       for (let i = 0; i < pages.length; i++) {
         document.getElementById(pages[i]).style.display = "none";
@@ -212,10 +288,109 @@
       document.getElementById(pageId).style.display = "block";
     }
 
-    function openDetails(title, text) {
+    function updateJobQuestions() {
+      let jobType = document.getElementById("jobType").value;
+      let extra = document.getElementById("extraQuestions");
+
+      if (jobType === "Babysitting") {
+        extra.innerHTML = `
+          <input id="extraOne" placeholder="Number of children">
+          <input id="extraTwo" placeholder="Ages of children">
+        `;
+      } else if (jobType === "Pet Sitting" || jobType === "Dog Walking") {
+        extra.innerHTML = `
+          <input id="extraOne" placeholder="Number/type of pets">
+          <input id="extraTwo" placeholder="Pet restrictions or allergies">
+        `;
+      } else if (jobType === "Plant Watering") {
+        extra.innerHTML = `
+          <input id="extraOne" placeholder="Indoor or outdoor plants">
+          <input id="extraTwo" placeholder="How many days?">
+        `;
+      } else {
+        extra.innerHTML = `
+          <input id="extraOne" placeholder="Extra detail 1">
+          <input id="extraTwo" placeholder="Extra detail 2">
+        `;
+      }
+    }
+
+    function submitJob() {
+      if (userRole !== "lister") {
+        alert("Only job listers can post jobs.");
+        return;
+      }
+
+      let type = document.getElementById("jobType").value;
+      let pay = document.getElementById("jobPay").value;
+      let intensity = document.getElementById("jobIntensity").value;
+      let ageRange = document.getElementById("jobAgeRange").value;
+      let date = document.getElementById("jobDate").value;
+      let neighborhood = document.getElementById("jobNeighborhood").value;
+      let notes = document.getElementById("jobNotes").value;
+
+      let extraOne = document.getElementById("extraOne") ? document.getElementById("extraOne").value : "";
+      let extraTwo = document.getElementById("extraTwo") ? document.getElementById("extraTwo").value : "";
+
+      let summary = `${pay} · ${intensity} · Ages ${ageRange} · ${neighborhood}`;
+
+      let details =
+        `Job type: ${type}. Pay: ${pay}. Intensity: ${intensity}. Preferred age range: ${ageRange}. Date/time: ${date}. Neighborhood: ${neighborhood}. Extra info: ${extraOne}, ${extraTwo}. Notes: ${notes}. Exact address unlocks only after both sides confirm.`;
+
+      let newJob = document.createElement("div");
+      newJob.innerHTML = `
+        <h3>${type}</h3>
+        <p>${summary}</p>
+      `;
+
+      newJob.onclick = function() {
+        openJobDetails(type, details);
+      };
+
+      document.getElementById("jobsList").appendChild(newJob);
+
+      alert("Job posted to Jobs Near You!");
+      showMainPage("jobsScreen");
+    }
+
+    function openJobDetails(title, text) {
       document.getElementById("detailsTitle").innerText = title;
       document.getElementById("detailsText").innerText = text;
+
+      if (userRole === "helper") {
+        document.getElementById("requestButton").style.display = "inline-block";
+      } else {
+        document.getElementById("requestButton").style.display = "none";
+      }
+
       showMainPage("detailsScreen");
+    }
+
+    function openHelperDetails(title, text) {
+      document.getElementById("detailsTitle").innerText = title;
+      document.getElementById("detailsText").innerText = text;
+      document.getElementById("requestButton").style.display = "inline-block";
+      showMainPage("detailsScreen");
+    }
+
+    function requestMatch() {
+      alert("Request sent! Personal information unlocks only after both sides confirm.");
+    }
+
+    function addChild() {
+      let name = document.getElementById("childName").value;
+      let age = document.getElementById("childAge").value;
+      let skills = document.getElementById("childSkills").value;
+
+      let child = document.createElement("div");
+      child.innerHTML = `
+        <h4>${name}</h4>
+        <p>Age: ${age}</p>
+        <p>Skills: ${skills}</p>
+        <p>Connected to family account.</p>
+      `;
+
+      document.getElementById("childList").appendChild(child);
     }
   </script>
 </body>
